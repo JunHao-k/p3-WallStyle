@@ -2,6 +2,9 @@ const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
 require("dotenv").config();
+const helpers = require("handlebars-helpers")({
+  handlebars: hbs.handlebars
+})
 
 // create an instance of express app
 let app = express();
@@ -24,8 +27,10 @@ app.use(
 );
 
 const landingRoutes = require("./routes/landing")
+const productRoutes = require('./routes/products')
 
 app.use("/", landingRoutes)
+app.use("/products", productRoutes)
 
 
 

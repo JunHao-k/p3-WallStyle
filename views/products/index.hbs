@@ -5,23 +5,35 @@
                 <tr>
                     <th>Id</th>
                     <th>Title</th>
-                    <th>Set</th>
+                    <th>Combination</th>
                     <th>Sales</th>
                     <th>Stock</th>
                     <th>Date</th>
+                    <th>Themes</th>
+                    <th>1st Image</th>
+                    <th>2nd Image</th>
+                    <th>3rd Image</th>
+                    <th>Image set</th>
                 </tr>
             </thead>
             <tbody>
-                {{#each posters}}
-                <tr>
+                {{#each products}}
+                <t3>
+                    <td>{{this.id}}</td>
                     <td>{{this.title}}</td>
-                    <td>{{this.description}}</td>
-                    <td>{{this.cost}}</td>
-                    <td>{{this.date}}</td>
+                    <td>{{this.combo}}</td>
+                    <td>{{this.sales}}</td>
                     <td>{{this.stock}}</td>
-                    <td>{{this.height}}</td>
-                    <td>{{this.width}}</td>
-                    <td>{{}}
+                    <td>{{moment this.date format = "ddd, DD MMM YYYY"}}</td>
+                    <td>
+                        {{#each this.themes}}
+                            <span class="badge bg-primary">{{this.name}}</span>
+                        {{/each}}
+                    </td>
+                    <td><img src = "{{this.image_one}}" style = "height: 100px; width: 100px"/></td>
+                    <td><img src = "{{this.image_two}}" style = "height: 100px; width: 100px"/></td>
+                    <td><img src = "{{this.image_three}}" style = "height: 100px; width: 100px"/></td>
+                    <td><img src = "{{this.image_set}}" style = "height: 100px; width: 100px"/></td>
                 </tr>
                 {{/each}}
             </tbody>

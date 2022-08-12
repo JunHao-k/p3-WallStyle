@@ -4,8 +4,9 @@ const {Product} = require('../models')
 
 router.get("/" , async(req , res) => {
     let products = await Product.collection().fetch({
-        'withRelated': ['images' , 'themes']
+        'withRelated': ['themes']
     })
+    console.log(products.toJSON())
     res.render('products/index' , {
         'products': products.toJSON()
     })
