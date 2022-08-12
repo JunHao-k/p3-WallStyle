@@ -27,20 +27,6 @@ exports.up = function(db) {
       type: 'string',
       length: 500,
     },
-    image_id: {
-      type: 'int',
-      unsigned: true,
-      notNull: true,
-      foreignKey: {
-        name: 'product_image_fk',
-        table: 'images',
-        rules: {
-          onDelete: 'cascade',
-          onUpdate: 'restrict'
-        },
-        mapping: 'id'
-      }
-    },
     set: {
       type: 'int',
       notNull: true
