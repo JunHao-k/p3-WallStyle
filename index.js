@@ -28,9 +28,11 @@ app.use(
 
 const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')
+const cloudinaryRoutes = require('./routes/cloudinary.js')
 
 app.use("/", landingRoutes)
 app.use("/products", productRoutes)
+app.use('/cloudinary', cloudinaryRoutes)
 
 
 

@@ -1,5 +1,7 @@
 {{#extends 'base'}}
     {{#block 'content'}}
+        <h1>Products</h1>
+        <a href="products/create" class="btn btn-primary">Add</a>
         <table class="table">
             <thead>
                 <tr>
@@ -10,11 +12,9 @@
                     <th>Stock</th>
                     <th>Date</th>
                     <th>Themes</th>
-                    <th>1st Image</th>
-                    <th>2nd Image</th>
-                    <th>3rd Image</th>
                     <th>Image set</th>
                 </tr>
+                  
             </thead>
             <tbody>
                 {{#each products}}
@@ -30,9 +30,6 @@
                             <span class="badge bg-primary">{{this.name}}</span>
                         {{/each}}
                     </td>
-                    <td><img src = "{{this.image_one}}" style = "height: 100px; width: 100px"/></td>
-                    <td><img src = "{{this.image_two}}" style = "height: 100px; width: 100px"/></td>
-                    <td><img src = "{{this.image_three}}" style = "height: 100px; width: 100px"/></td>
                     <td><img src = "{{this.image_set}}" style = "height: 100px; width: 100px"/></td>
                 </tr>
                 {{/each}}
