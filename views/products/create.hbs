@@ -13,50 +13,6 @@
     {{/block}}
 
     {{#block 'js'}}
-        <!-- axios -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-        <!-- Cloudinary widget -->
-        <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
-
-
-        <!-- Script to get Signature -->
-        <script>
-            function generateSignature(callback , params_to_sign){
-                // Pass the "params_to_sign" to the cloudinary route in the query string
-                axios.get('/cloudinary/sign' , {
-                    'params': {
-                        'params_to_sign': params_to_sign
-                    }
-                }).then(function(response){
-                    // callback is given by cloudinary
-                    callback(response.data)
-                })
-            }
-        </script>
-
-        <!-- Script to display the widget -->
-        <script>
-            const myWidget = cloudinary.createUploadWidget({
-                cloudName: "{{cloudinaryName}}",
-                apiKey: "{{cloudinaryApiKey}}",
-                uploadPreset: "{{cloudinaryPreset}}",
-                uploadSignature: generateSignature
-            }, (error , result) => {
-                if(!error && result.event == "success"){
-                    console.log(result)
-                    document.querySelector('#id_image_set').value = result.info._url
-                    document.querySelector('#uploaded_image').src = result.info._url
-                    document.querySelector('#uploaded_image').style.display = "block"
-                }
-            })
-
-            // Add event listener to the upload button
-            document.querySelector("#upload_widget").addEventListener('click' , function(e){
-                e.preventDefault()
-                myWidget.open()
-            })
-        </script>
-
+        {{> cloudinary imageId="#id_image_set"}}
     {{/block}}
 {{/extends}}
