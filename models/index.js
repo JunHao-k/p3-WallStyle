@@ -4,15 +4,11 @@ const Product = bookshelf.model('Product' , {
     tableName: 'products',
     themes: function(){
         return this.belongsToMany('Theme')
+    },
+    variants: function(){
+        return this.hasMany('Variant')
     }
 })
-
-// const Image = bookshelf.model('Image' , {
-//     tableName: 'images',
-//     product: function(){
-//         return this.belongsTo('Product')
-//     }
-// })
 
 const Theme = bookshelf.model('Theme' , {
     tableName: 'themes',
@@ -21,4 +17,11 @@ const Theme = bookshelf.model('Theme' , {
     }
 })
 
-module.exports = { Product, Theme }
+const Variant = bookshelf.model('Variant' , {
+    tableName: 'variants',
+    product: function(){
+        return this.belongsTo('Product')
+    }
+})
+
+module.exports = { Product, Theme, Variant }

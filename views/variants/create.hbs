@@ -1,0 +1,19 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+        <h1>Add New Model</h1>
+        <form method = "POST">
+            {{{form}}}
+            <div>
+                <a href = "#" class = "btn btn-primary" id = "upload_widget">Upload</a>
+                <img src = "" style = "display:none" id = "uploaded_image"/>
+                {{!-- <img src = "" style = "display:none" id = "uploaded_thumbnail_image"/> --}}
+            </div>
+            {{!-- <input type="hidden" value="{{csrfToken}}" name="_csrf"/> --}}
+            <input type = "submit" class = "btn btn-primary my-3"/>
+        </form>
+    {{/block}}
+
+    {{#block 'js'}}
+        {{> cloudinary imageId="#id_model_image" thumbnailId="#id_model_thumbnail"}}
+    {{/block}}
+{{/extends}}

@@ -67,4 +67,27 @@ const createProductForm = (themes) => {
     })
 }
 
-module.exports = { createProductForm , bootstrapField }
+const createVariantForm = () => {
+    return forms.create({
+        'model_name': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'model_stock': fields.string({
+            required: true,
+            errorAfterField: true,
+            validators: [validators.integer() , validators.min(0)]
+        }),
+        'model_image': fields.string({
+            required: true,
+            widget: widgets.hidden()
+        }),
+        'last_updated': fields.date({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.date()
+        }),
+    })
+}
+
+module.exports = { createProductForm , createVariantForm, bootstrapField  }

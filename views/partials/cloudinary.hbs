@@ -35,6 +35,10 @@
             document.querySelector('{{imageId}}').value = result.info.url
             document.querySelector('#uploaded_image').src = result.info.url
             document.querySelector('#uploaded_image').style.display = "block"
+            document.querySelector('{{thumbnailId}}').value = result.info.thumbnail_url
+            // document.querySelector('#uploaded_thumbnail_image').src = result.info.thumbnail_url
+            // document.querySelector('#uploaded_thumbnail_image').style.display = "block"
+
         }
     })
 

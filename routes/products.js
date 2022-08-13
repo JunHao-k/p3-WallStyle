@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const { Product, Theme } = require('../models')
-const { bootstrapField, createProductForm } = require('../forms');
+const { Product, Theme, Variant } = require('../models')
+const { bootstrapField, createVariantForm, createProductForm } = require('../forms');
 
 router.get("/" , async(req , res) => {
     let products = await Product.collection().fetch({
@@ -109,6 +109,7 @@ router.get("/:product_id/update" , async(req , res) => {
     })
 })
 
+
 router.post("/:product_id/update" , async(req , res) => {
 
     const themes = await Theme.fetchAll().map(theme => {
@@ -160,6 +161,61 @@ router.post("/:product_id/update" , async(req , res) => {
                 cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
             })
         },
+    })
+})
+
+router.get("/variant/:product_id/create" , async (req , res) => {
+    
+    const variantForm = createVariantForm();
+
+    res.render("variants/create" , {
+        form: variantForm.toHTML(bootstrapField),
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+    })
+})
+
+router.post("/variant/:product_id/create" , async (req , res) => {
+
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        withRelated: ['themes'], // Fetch all the themes associated with the product
+        require: true  // If not found will cause an exception (aka an error)
+    })
+
+    const variantForm = createVariantForm();
+    variantForm.handle(req , {
+        'success': async function(form){
+            console.log(form.data)
+            const variant = new Variant
+            variant.set('product_id' , req.params.product_id)
+            variant.set('model_name' , form.data.model_name)
+            variant.set('model_stock' , form.data.model_stock)
+            variant.set('last_updated' , form.data.last_updated)
+            variant.set('model_image' , form.data.model_image)
+            variant.set('model_thumbnail' , form.data.model_thumbnail)
+
+            await variant.save()
+            res.redirect("/products")
+        },
+        'error': function(form){
+            res.render('products/create' , {
+                'form': form.toHTML(bootstrapField),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            })
+        },
+        'empty': function(form){
+            res.render('products/create' , {
+                'form': form.toHTML(bootstrapField),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            })
+        }
     })
 })
 
