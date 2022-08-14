@@ -1,10 +1,10 @@
 {{#extends 'base'}}
     {{#block 'css'}}
-        <link rel="stylesheet" href="/style/products.css">
+        <link rel="stylesheet" href="/style/productTable.css">
     {{/block}}
     {{#block 'content'}}
         <h1>Products</h1>
-        <a href="products/create" class="btn btn-primary">Add</a>
+        <div class="btn-div"><a href="products/create" class="add-btn"><i class="fa-solid fa-plus" style=" font-size: 40px"></i></a></div>
         <div class="product-table">
             <table class="table" width="100%">
                 <thead>
@@ -17,6 +17,8 @@
                         <th>Date</th>
                         <th>Themes</th>
                         <th>Image set</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     
                 </thead>
@@ -31,10 +33,15 @@
                         <td><h5>{{moment this.date format = "ddd, DD MMM YYYY"}}</h5></td>
                         <td>
                             {{#each this.themes}}
-                                <span class="badge bg-primary">{{this.name}}</span>
+                                <span class="badge bg-secondary">{{this.name}}</span>
                             {{/each}}
                         </td>
                         <td><img src = "{{this.image_set}}" style = "height: 100px; width: 100px"/></td>
+                        <td><a href="products/{{this.id}}/variants" class="btn btn-dark btn-outline-light">Variants</a></td>
+                        <td>
+                            <a href="products/{{this.id}}/update" class="btn btn-dark btn-outline-light"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a class="btn btn-dark btn-outline-light"><i class="fa-solid fa-trash-can"></i></a>
+                        </td>
                     </tr>
                     {{/each}}
                 </tbody>

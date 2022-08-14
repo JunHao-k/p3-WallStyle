@@ -19,7 +19,7 @@ body{
     background: white;
     border-radius: 8px;
     padding: 10px;
-    box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25);
+    box-shadow: 0 2px 20px 0.2rem rgba(52, 58, 64, 0.25)
 }
 
 .product-table h5{
@@ -33,4 +33,40 @@ table{
 
 tr{
     border-bottom: 3px solid #eef0f3;
+}
+
+.product-table thead{
+    background-color: black;
+    color: white;
+    
+}
+
+
+.btn-div{
+    height: 50px;
+    width: 50px;
+    background-color: black;
+    border-radius: 8px;
+    padding-top: .3rem;
+    transition: 0.25s ease;
+}
+
+.btn-div i{
+    color: white;
+    transition: 0.25s ease;
+}
+
+.add-btn{
+    margin-left: .5rem;
+    
+}
+
+.btn-div:hover{
+    background-color: rgba(52, 58, 64, 0.25);
+    /* transition: 0.25s ease; */
+}
+
+.btn-div i:hover{
+    color: black;
+    /* transition: 0.25s ease; */
 }

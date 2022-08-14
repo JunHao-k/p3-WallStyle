@@ -2,14 +2,13 @@ const express = require("express")
 const router = express.Router()
 const { Product, Theme, Variant } = require('../models')
 const { bootstrapField, createVariantForm, createProductForm } = require('../forms');
+const dataLayer = require('../dal/products')
 
 
 /* -------------------------------------- READ for main products ---------------------------------- */
 router.get("/" , async(req , res) => {
-    let products = await Product.collection().fetch({
-        'withRelated': ['themes']
-    })
-    // console.log(products.toJSON())
+    let products = await dataLayer.getAllProducts()
+    
     res.render('products/index' , {
         'products': products.toJSON()
     })
@@ -185,9 +184,17 @@ router.post("/:product_id/update" , async(req , res) => {
 
 
 router.get("/:product_id/variants" , async (req , res) => {
-    let variants = await Variant.collection().fetch({
-        'withRelated': ['product']
+
+    const variants = await Variant.where({
+        'product_id': req.params.product_id
+    }).fetchAll({
+        withRelated: ['product'], 
+        require: false 
     })
+    
+    // let variants = await Variant.collection().fetch({
+    //     'withRelated': ['product']
+    // })
 
     const product = await Product.where({
         'id': req.params.product_id
@@ -218,14 +225,7 @@ router.get("/:product_id/variants/create" , async (req , res) => {
 })
 
 router.post("/:product_id/variants/create" , async (req , res) => {
-
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
-        require: true  // If not found will cause an exception (aka an error)
-    })
-
+    let productId = req.params.product_id
     const variantForm = createVariantForm();
     variantForm.handle(req , {
         'success': async function(form){
@@ -239,7 +239,7 @@ router.post("/:product_id/variants/create" , async (req , res) => {
             variant.set('model_thumbnail' , form.data.model_thumbnail)
 
             await variant.save()
-            res.redirect("/products")
+            res.redirect(`/products/${productId}/variants`)
         },
         'error': function(form){
             res.render('products/create' , {
@@ -322,7 +322,7 @@ router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
             variant.set(variantData)
 
             await variant.save()
-            res.redirect("/products")
+            res.redirect(`/products/${req.params.product_id}/variants`)
         },
         'error': async(form) => {
             res.render("products/update" , {

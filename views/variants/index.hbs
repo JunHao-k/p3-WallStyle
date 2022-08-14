@@ -1,63 +1,77 @@
 {{#extends 'base'}}
+    {{#block 'css'}}
+        <link rel="stylesheet" href="/style/productTable.css">
+    {{/block}}
     {{#block 'content'}}
         <h1>{{product.title}}</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th>Combination</th>
-                    <th>Sales</th>
-                    <th>Stock</th>
-                    <th>Date</th>
-                    <th>Themes</th>
-                    <th>Image set</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{product.id}}</td>
-                    <td>{{product.title}}</td>
-                    <td>{{product.combo}}</td>
-                    <td>{{product.sales}}</td>
-                    <td>{{product.stock}}</td>
-                    <td>{{moment product.date format = "ddd, DD MMM YYYY"}}</td>
-                    <td>
-                        {{#each product.themes}}
-                            <span class="badge bg-primary">{{product.name}}</span>
-                        {{/each}}
-                    </td>
-                    <td><img src = "{{product.image_set}}" style = "height: 100px; width: 100px"/></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="product-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Combination</th>
+                        <th>Sales</th>
+                        <th>Stock</th>
+                        <th>Date</th>
+                        <th>Themes</th>
+                        <th>Image set</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><h5>{{product.id}}</h5></td>
+                        <td><h5>{{product.title}}</h5></td>
+                        <td><h5>{{product.combo}}</h5></td>
+                        <td><h5>{{product.sales}}</h5></td>
+                        <td><h5>{{product.stock}}</h5></td>
+                        <td><h5>{{moment product.date format = "ddd, DD MMM YYYY"}}</td>
+                        <td>
+                            {{#each product.themes}}
+                                <span class="badge bg-primary">{{product.name}}</span>
+                            {{/each}}
+                        </td>
+                        <td><img src = "{{product.image_set}}" style = "height: 100px; width: 100px"/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <h1>{{product.title}}'s variants</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Product Id</th>
-                    <th>Model Name</th>
-                    <th>Stock</th>
-                    <th>Model Thumbnail</th>
-                    <th>Model Image</th>
-                    <th>Last updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each variants}}
-                <tr>
-                    <td>{{this.id}}</td>
-                    <td>{{this.product_id}}</td>
-                    <td>{{this.model_name}}</td>
-                    <td>{{this.model_stock}}</td>
-                    <td><img src = "{{this.model_thumbnail}}"/></td>
-                    <td><img src = "{{this.model_image}}" style = "height: 200px; width: 200px"/></td>
-                    <td>{{moment this.last_updated format = "ddd, DD MMM YYYY"}}</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+        <h1>{{product.title}} models:</h1>
+        <div class="btn-div"><a href="/products/{{product.id}}/variants/create" class="add-btn"><i class="fa-solid fa-plus" style=" font-size: 40px"></i></a></div>
+        
+        <div class="product-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Product Id</th>
+                        <th>Model Name</th>
+                        <th>Stock</th>
+                        <th>Model Thumbnail</th>
+                        <th>Model Image</th>
+                        <th>Last updated</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each variants}}
+                    <tr>
+                        <td><h5>{{this.id}}</h5></td>
+                        <td><h5>{{this.product_id}}</h5></td>
+                        <td><h5>{{this.model_name}}</h5></td>
+                        <td><h5>{{this.model_stock}}</h5></td>
+                        <td><img src = "{{this.model_thumbnail}}"/></td>
+                        <td><img src = "{{this.model_image}}" style = "height: 200px; width: 200px"/></td>
+                        <td><h5>{{moment this.last_updated format = "ddd, DD MMM YYYY"}}</h5></td>
+                        <td>
+                            <a href="/products/{{this.product_id}}/variants/{{this.id}}/update" class="btn btn-dark btn-outline-light"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a class="btn btn-dark btn-outline-light"><i class="fa-solid fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     {{/block}}
 {{/extends}}
