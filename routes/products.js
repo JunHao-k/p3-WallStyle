@@ -3,6 +3,8 @@ const router = express.Router()
 const { Product, Theme, Variant } = require('../models')
 const { bootstrapField, createVariantForm, createProductForm } = require('../forms');
 
+
+/* -------------------------------------- READ for main products ---------------------------------- */
 router.get("/" , async(req , res) => {
     let products = await Product.collection().fetch({
         'withRelated': ['themes']
@@ -13,6 +15,13 @@ router.get("/" , async(req , res) => {
     })
 })
 
+/* -------------------------------------- END OF READ for main products ---------------------------------- */
+
+
+
+
+
+/* ---------------------------------------- CREATE for main products -------------------------------------- */
 
 router.get("/create" , async(req , res) => {
     const themes = await Theme.fetchAll().map(theme => {
@@ -73,6 +82,13 @@ router.post("/create" , async(req , res) => {
     })
 
 })
+
+/* ---------------------------------------- END OF CREATE for main products -------------------------------------- */
+
+
+
+
+/* ---------------------------------------- UPDATE for main products -------------------------------------- */
 
 router.get("/:product_id/update" , async(req , res) => {
 
@@ -164,7 +180,32 @@ router.post("/:product_id/update" , async(req , res) => {
     })
 })
 
-router.get("/variant/:product_id/create" , async (req , res) => {
+
+/* ---------------------------------------- END OF UPDATE for main products -------------------------------------- */
+
+
+router.get("/:product_id/variants" , async (req , res) => {
+    let variants = await Variant.collection().fetch({
+        'withRelated': ['product']
+    })
+
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        withRelated: ['themes'], // Fetch all the themes associated with the product
+        require: true  // If not found will cause an exception (aka an error)
+    })
+
+    res.render("variants/index" , {
+        'product': product.toJSON(),
+        'variants': variants.toJSON()
+    })
+})
+
+
+
+
+router.get("/:product_id/variants/create" , async (req , res) => {
     
     const variantForm = createVariantForm();
 
@@ -176,7 +217,7 @@ router.get("/variant/:product_id/create" , async (req , res) => {
     })
 })
 
-router.post("/variant/:product_id/create" , async (req , res) => {
+router.post("/:product_id/variants/create" , async (req , res) => {
 
     const product = await Product.where({
         'id': req.params.product_id
@@ -188,7 +229,7 @@ router.post("/variant/:product_id/create" , async (req , res) => {
     const variantForm = createVariantForm();
     variantForm.handle(req , {
         'success': async function(form){
-            console.log(form.data)
+            // console.log(form.data)
             const variant = new Variant
             variant.set('product_id' , req.params.product_id)
             variant.set('model_name' , form.data.model_name)
@@ -216,6 +257,91 @@ router.post("/variant/:product_id/create" , async (req , res) => {
                 cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
             })
         }
+    })
+})
+
+
+router.get("/:product_id/variants/:variant_id/update" , async (req , res) => {
+
+    const variant = await Variant.where({
+        'id': req.params.variant_id
+    }).fetch({
+        withRelated: ['product'], 
+        require: true  // If not found will cause an exception (aka an error)
+    })
+
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        withRelated: ['themes'], // Fetch all the themes associated with the product
+        require: true  // If not found will cause an exception (aka an error)
+    })
+    
+    const variantForm = createVariantForm();
+    
+    variantForm.fields.model_name.value = variant.get("model_name")
+    variantForm.fields.model_image.value = variant.get("model_image")
+    variantForm.fields.model_stock.value = variant.get("model_stock")
+    variantForm.fields.last_updated.value = variant.get('last_updated')
+    variantForm.fields.model_thumbnail.value = variant.get('model_thumbnail')
+
+    res.render("variants/update" , {
+        "form": variantForm.toHTML(bootstrapField),
+        "product": product.toJSON(),
+        "variant": variant.toJSON(),
+        // Pass cloudinary info to hbs file for use in JS block
+        cloudinaryName: process.env.CLOUDINARY_NAME,
+        cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+        cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+    })
+})
+
+
+router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
+
+    const variant = await Variant.where({
+        'id': req.params.variant_id
+    }).fetch({
+        withRelated: ['product'], 
+        require: true  // If not found will cause an exception (aka an error)
+    })
+
+    const product = await Product.where({
+        'id': req.params.product_id
+    }).fetch({
+        withRelated: ['themes'], // Fetch all the themes associated with the product
+        require: true  // If not found will cause an exception (aka an error)
+    })
+
+    const variantForm = createVariantForm();
+
+    variantForm.handle(req , {
+        'success': async(form) => {
+            
+            let {...variantData} = form.data
+            variant.set(variantData)
+
+            await variant.save()
+            res.redirect("/products")
+        },
+        'error': async(form) => {
+            res.render("products/update" , {
+                'product': product.toJSON(),
+                'form': form.toHTML(bootstrapField),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            })
+        },
+        'empty': async(form) => {
+            res.render("products/update" , {
+                'product': product.toJSON(),
+                'form': form.toHTML(bootstrapField),
+                cloudinaryName: process.env.CLOUDINARY_NAME,
+                cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+                cloudinaryPreset: process.env.CLOUDINARY_UPLOAD_PRESET
+            })
+        },
     })
 })
 

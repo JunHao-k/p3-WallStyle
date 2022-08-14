@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Lekton&family=Roboto:wght@200&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto" , sans-serif;
+}
+
+body{
+    width: 100%;
+    background: #E5E7EB;
+    position: relative
+}
+
+.product-table{
+    width: 100%;
+    margin: 30px 0 30px;
+    overflow: auto;
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25);
+}
+
+.product-table h5{
+    font-weight: 600;
+    font-size: 15px;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+tr{
+    border-bottom: 3px solid #eef0f3;
+}

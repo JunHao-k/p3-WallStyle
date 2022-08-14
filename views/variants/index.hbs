@@ -1,0 +1,63 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+        <h1>{{product.title}}</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Combination</th>
+                    <th>Sales</th>
+                    <th>Stock</th>
+                    <th>Date</th>
+                    <th>Themes</th>
+                    <th>Image set</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{product.id}}</td>
+                    <td>{{product.title}}</td>
+                    <td>{{product.combo}}</td>
+                    <td>{{product.sales}}</td>
+                    <td>{{product.stock}}</td>
+                    <td>{{moment product.date format = "ddd, DD MMM YYYY"}}</td>
+                    <td>
+                        {{#each product.themes}}
+                            <span class="badge bg-primary">{{product.name}}</span>
+                        {{/each}}
+                    </td>
+                    <td><img src = "{{product.image_set}}" style = "height: 100px; width: 100px"/></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h1>{{product.title}}'s variants</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Product Id</th>
+                    <th>Model Name</th>
+                    <th>Stock</th>
+                    <th>Model Thumbnail</th>
+                    <th>Model Image</th>
+                    <th>Last updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each variants}}
+                <tr>
+                    <td>{{this.id}}</td>
+                    <td>{{this.product_id}}</td>
+                    <td>{{this.model_name}}</td>
+                    <td>{{this.model_stock}}</td>
+                    <td><img src = "{{this.model_thumbnail}}"/></td>
+                    <td><img src = "{{this.model_image}}" style = "height: 200px; width: 200px"/></td>
+                    <td>{{moment this.last_updated format = "ddd, DD MMM YYYY"}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{/block}}
+{{/extends}}

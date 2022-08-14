@@ -1,39 +1,44 @@
 {{#extends 'base'}}
+    {{#block 'css'}}
+        <link rel="stylesheet" href="/style/products.css">
+    {{/block}}
     {{#block 'content'}}
         <h1>Products</h1>
         <a href="products/create" class="btn btn-primary">Add</a>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Title</th>
-                    <th>Combination</th>
-                    <th>Sales</th>
-                    <th>Stock</th>
-                    <th>Date</th>
-                    <th>Themes</th>
-                    <th>Image set</th>
-                </tr>
-                  
-            </thead>
-            <tbody>
-                {{#each products}}
-                <t3>
-                    <td>{{this.id}}</td>
-                    <td>{{this.title}}</td>
-                    <td>{{this.combo}}</td>
-                    <td>{{this.sales}}</td>
-                    <td>{{this.stock}}</td>
-                    <td>{{moment this.date format = "ddd, DD MMM YYYY"}}</td>
-                    <td>
-                        {{#each this.themes}}
-                            <span class="badge bg-primary">{{this.name}}</span>
-                        {{/each}}
-                    </td>
-                    <td><img src = "{{this.image_set}}" style = "height: 100px; width: 100px"/></td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+        <div class="product-table">
+            <table class="table" width="100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Combination</th>
+                        <th>Sales</th>
+                        <th>Stock</th>
+                        <th>Date</th>
+                        <th>Themes</th>
+                        <th>Image set</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {{#each products}}
+                    <tr>
+                        <td><h5>{{this.id}}</h5></td>
+                        <td><h5>{{this.title}}</h5></td>
+                        <td><h5>{{this.combo}}</h5></td>
+                        <td><h5>{{this.sales}}</h5></td>
+                        <td><h5>{{this.stock}}</h5></td>
+                        <td><h5>{{moment this.date format = "ddd, DD MMM YYYY"}}</h5></td>
+                        <td>
+                            {{#each this.themes}}
+                                <span class="badge bg-primary">{{this.name}}</span>
+                            {{/each}}
+                        </td>
+                        <td><img src = "{{this.image_set}}" style = "height: 100px; width: 100px"/></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     {{/block}}
 {{/extends}}

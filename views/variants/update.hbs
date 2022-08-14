@@ -1,11 +1,12 @@
 {{#extends 'base'}}
     {{#block 'content'}}
-        <h1>Update product: {{product.title}}</h1>
+        <h1>Update {{product.title}} variant: </h1>
         <form method = "POST">
             {{{form}}}
             <div>
-                {{#if product.image_set}}
-                    <img src = "{{product.image_set}}" id = "uploaded_image" style = "height: 300px; width: 300px; object-fit: cover" />
+                {{#if variant.model_image}}
+                    <img src = "{{variant.model_image}}" id = "uploaded_image" style = "height: 300px; width: 300px; object-fit: cover" />
+                    <img src = "{{variant.model_thumbnail}}" id = "uploaded_image"/>
                 {{else}}
                     <img src = "" style = "display:none; height: 300px; width: 300px; object-fit: cover" id = "uploaded_image"/>
                 {{/if}}
@@ -20,7 +21,7 @@
     {{/block}}
 
     {{#block 'js'}}
-        {{> cloudinaryJS imageId="#id_image_set"}}
+        {{> cloudinaryJS imageId="#id_model_image" thumbnailId="#id_model_thumbnail"}}
 
     {{/block}}
 {{/extends}}

@@ -82,6 +82,10 @@ const createVariantForm = () => {
             required: true,
             widget: widgets.hidden()
         }),
+        'model_thumbnail': fields.string({
+            required: true,
+            widget: widgets.hidden()
+        }),
         'last_updated': fields.date({
             required: true,
             errorAfterField: true,
