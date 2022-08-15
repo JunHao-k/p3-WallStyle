@@ -293,6 +293,8 @@ router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
     })
 })
 
-
+// router.post("/:product_id/variants/:variant_id/delete" , async (req , res) => {
+    
+// })
 
 module.exports = router

@@ -66,12 +66,23 @@
                         <td><h5>{{moment this.last_updated format = "ddd, DD MMM YYYY"}}</h5></td>
                         <td>
                             <a href="/products/{{this.product_id}}/variants/{{this.id}}/update" class="btn btn-dark btn-outline-light"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a class="btn btn-dark btn-outline-light"><i class="fa-solid fa-trash-can"></i></a>
+                            
+                            <a href = "/products/{{this.product_id}}/variants/{{this.id}}/delete" 
+                                data-item="Model {{this.model_name}}"
+                                data-variantid="{{this.id}}" 
+                                data-productid="{{this.product_id}}"
+                                class="deleteBtn btn btn-dark btn-outline-light">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
                         </td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
         </div>
+    {{/block}}
+
+    {{#block 'js'}}
+        {{> sweetAlertJS toRemove="variant"}}
     {{/block}}
 {{/extends}}
