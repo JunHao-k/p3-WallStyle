@@ -2,6 +2,9 @@ const express = require("express");
 const hbs = require("hbs");
 const wax = require("wax-on");
 require("dotenv").config();
+const session = require('express-session')
+const flash = require('connect-flash')
+const FileStore = require('session-file-store')(session)
 const helpers = require("handlebars-helpers")({
   handlebars: hbs.handlebars
 })
@@ -28,6 +31,13 @@ app.use(
     extended: false
   })
 );
+
+app.use(session({
+  store: new FileStore(), // We want to use files to store sessions
+  secret: process.env.SESSION_SECRET_KEY, // Used to generate the session id
+  resave: false, // Do we automatically recreate the session even if there is no change to it
+  saveUninitialized: true // If a new browser connects do we create a new session
+}))
 
 const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')

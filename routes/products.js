@@ -8,7 +8,6 @@ const dataLayer = require('../dal/products')
 /* -------------------------------------- READ for main products ---------------------------------- */
 router.get("/" , async(req , res) => {
     let products = await dataLayer.getAllProducts()
-    
     res.render('products/index' , {
         'products': products.toJSON()
     })
@@ -23,11 +22,11 @@ router.get("/" , async(req , res) => {
 /* ---------------------------------------- CREATE for main products -------------------------------------- */
 
 router.get("/create" , async(req , res) => {
-    const themes = await Theme.fetchAll().map(theme => {
-        return [theme.get('id'), theme.get('name')]
-    });
-    
+
+    const themes = await dataLayer.getAllThemes()
+
     const productForm = createProductForm(themes);
+
     res.render("products/create" , {
         form: productForm.toHTML(bootstrapField),
         cloudinaryName: process.env.CLOUDINARY_NAME,
@@ -38,9 +37,8 @@ router.get("/create" , async(req , res) => {
 })
 
 router.post("/create" , async(req , res) => {
-    const themes = await Theme.fetchAll().map(theme => {
-        return [theme.get('id'), theme.get('name')]
-    })
+
+    const themes = await dataLayer.getAllThemes()
 
     const productForm = createProductForm(themes);
 
@@ -91,16 +89,8 @@ router.post("/create" , async(req , res) => {
 
 router.get("/:product_id/update" , async(req , res) => {
 
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
-        require: true  // If not found will cause an exception (aka an error)
-    })
-
-    const themes = await Theme.fetchAll().map(theme => {
-        return [theme.get('id'), theme.get('name')]
-    })
+    const product = await dataLayer.getProductById(req.params.product_id)
+    const themes = await dataLayer.getAllThemes()
 
     const productForm = createProductForm(themes);
     
@@ -127,23 +117,16 @@ router.get("/:product_id/update" , async(req , res) => {
 
 router.post("/:product_id/update" , async(req , res) => {
 
-    const themes = await Theme.fetchAll().map(theme => {
-        return [theme.get('id'), theme.get('name')]
-    })
+    const themes = await dataLayer.getAllThemes()
 
     const productForm = createProductForm(themes);
 
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
-        require: true  // If not found will cause an exception (aka an error)
-    })
+    const product = await dataLayer.getProductById(req.params.product_id)
 
     productForm.handle(req , {
         'success': async(form) => {
-            console.log("HERE ------------------------------------------------------> ")
-            console.log(form.data)
+            // console.log("HERE ------------------------------------------------------> ")
+            // console.log(form.data)
             let {themes , ...productData} = form.data
             product.set(productData)
 
@@ -185,23 +168,9 @@ router.post("/:product_id/update" , async(req , res) => {
 
 router.get("/:product_id/variants" , async (req , res) => {
 
-    const variants = await Variant.where({
-        'product_id': req.params.product_id
-    }).fetchAll({
-        withRelated: ['product'], 
-        require: false 
-    })
-    
-    // let variants = await Variant.collection().fetch({
-    //     'withRelated': ['product']
-    // })
+    const variants = await dataLayer.getVariantsByProductId(req.params.product_id)
 
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
-        require: true  // If not found will cause an exception (aka an error)
-    })
+    const product = await dataLayer.getProductById(req.params.product_id)
 
     res.render("variants/index" , {
         'product': product.toJSON(),
@@ -263,19 +232,9 @@ router.post("/:product_id/variants/create" , async (req , res) => {
 
 router.get("/:product_id/variants/:variant_id/update" , async (req , res) => {
 
-    const variant = await Variant.where({
-        'id': req.params.variant_id
-    }).fetch({
-        withRelated: ['product'], 
-        require: true  // If not found will cause an exception (aka an error)
-    })
+    const variant = await dataLayer.getVariantById(req.params.variant_id)
 
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
-        require: true  // If not found will cause an exception (aka an error)
-    })
+    const product = await dataLayer.getProductById(req.params.product_id)
     
     const variantForm = createVariantForm();
     
@@ -299,19 +258,8 @@ router.get("/:product_id/variants/:variant_id/update" , async (req , res) => {
 
 router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
 
-    const variant = await Variant.where({
-        'id': req.params.variant_id
-    }).fetch({
-        withRelated: ['product'], 
-        require: true  // If not found will cause an exception (aka an error)
-    })
-
-    const product = await Product.where({
-        'id': req.params.product_id
-    }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
-        require: true  // If not found will cause an exception (aka an error)
-    })
+    const variant = await dataLayer.getVariantById(req.params.variant_id)
+    const product = await dataLayer.getProductById(req.params.product_id)
 
     const variantForm = createVariantForm();
 
@@ -344,5 +292,7 @@ router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
         },
     })
 })
+
+
 
 module.exports = router
