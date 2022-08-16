@@ -165,6 +165,26 @@ router.post("/:product_id/update" , async(req , res) => {
 
 /* ---------------------------------------- END OF UPDATE for main products -------------------------------------- */
 
+router.post("/:product_id/delete" , async(req , res) => {
+    const product = await dataLayer.getProductById(req.params.product_id)
+    let deleteResult = false
+    if(product){
+        deleteResult = true
+    }
+    product.destroy()
+    if(deleteResult){
+        req.flash('success_messages' , "Model variant has been successfully deleted")
+    }
+    else{
+        req.flash("error_messages" , "Delete unsuccessful. Please try again")
+    }
+    
+    res.redirect(`/products`)
+})
+
+
+
+
 
 router.get("/:product_id/variants" , async (req , res) => {
 
@@ -293,8 +313,22 @@ router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
     })
 })
 
-// router.post("/:product_id/variants/:variant_id/delete" , async (req , res) => {
+router.post("/:product_id/variants/:variant_id/delete" , async (req , res) => {
+    const variant = await dataLayer.getVariantById(req.params.variant_id)
+    let productid = req.params.product_id
+    let deleteResult = false
+    if(variant){
+        deleteResult = true
+    }
+    variant.destroy()
+    if(deleteResult){
+        req.flash('success_messages' , "Model variant has been successfully deleted")
+    }
+    else{
+        req.flash("error_messages" , "Delete unsuccessful. Please try again")
+    }
     
-// })
+    res.redirect(`/products/${productid}/variants`)
+})
 
 module.exports = router

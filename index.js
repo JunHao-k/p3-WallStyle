@@ -18,6 +18,22 @@ app.set("view engine", "hbs");
 // static folder
 app.use(express.static("public"));
 
+app.use(session({
+  store: new FileStore(), // We want to use files to store sessions
+  secret: process.env.SESSION_SECRET_KEY, // Used to generate the session id
+  resave: false, // Do we automatically recreate the session even if there is no change to it
+  saveUninitialized: true // If a new browser connects do we create a new session
+}))
+
+app.use(flash())
+
+// Register Flash messages
+app.use(function(req, res, next){
+  res.locals.success_messages = req.flash("success_messages")
+  res.locals.error_messages = req.flash("error_messages")
+  next()
+})
+
 // Set hbs partials
 hbs.registerPartials("./views/partials")
 
@@ -32,12 +48,9 @@ app.use(
   })
 );
 
-app.use(session({
-  store: new FileStore(), // We want to use files to store sessions
-  secret: process.env.SESSION_SECRET_KEY, // Used to generate the session id
-  resave: false, // Do we automatically recreate the session even if there is no change to it
-  saveUninitialized: true // If a new browser connects do we create a new session
-}))
+
+
+
 
 const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')

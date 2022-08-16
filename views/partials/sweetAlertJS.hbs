@@ -10,13 +10,11 @@
     
       // Choose either variant or product to delete, product/variant passed into target "variable"
       const toRemove = "{{target}}"; 
-      const title = `${event.target.dataset.item} will be removed. Do you want to continue with this action?`;
-
+      let title = `${event.target.dataset.item} will be removed. Do you want to continue with this action?`;
       // Removal message
-      //if(toRemove == "product"){
-      //  title = 
-      //}
-      
+      if(toRemove == "product"){
+        title = `${event.target.dataset.productitem} will be removed. Do you want to continue with this action?`
+      }
       
 
       const result = await Swal.fire({
@@ -36,9 +34,9 @@
         form.method = 'post';
         
         form.action = `/products/${event.target.dataset.productid}/variants/${event.target.dataset.variantid}/delete`
-        //if(toRemove == 'product') {
-        //  form.action = ;
-        //}
+        if(toRemove == 'product') {
+          form.action = `/products/${event.target.dataset.productid}/delete`;
+        }
 
         //form.action = `/products/${event.target.dataset.productId}/delete`;
         
