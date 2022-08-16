@@ -6,6 +6,8 @@ const dataLayer = require('../dal/products')
 
 
 /* -------------------------------------- READ for main products ---------------------------------- */
+
+
 router.get("/" , async(req , res) => {
 
     // Get all the possible themes
@@ -21,12 +23,12 @@ router.get("/" , async(req , res) => {
     // Search logic begins here:
     searchForm.handle(req , {
         'success': async function(form){
-            console.log("-----------------------" , form.data)
+
+
             if(form.data.title){
-                query.where('title' , 'like' , '%' + form.data.title + '%')
+                query.where('title' , 'like' , '%' + form.data.title + '%');
             }
 
-            
             if(form.data.on_sale == 1) {
                 query.where('sales', '=', 0);
             }
@@ -35,45 +37,42 @@ router.get("/" , async(req , res) => {
             }
             
             
-            
-            
-
+  
             if(form.data.min_discount){
-                query.where('sales' , '>=' , form.data.min_discount)
+                query.where('sales' , '>=' , form.data.min_discount);
             }
             if(form.data.max_discount){
-                query.where('sales' , '<=' , form.data.max_discount)
+                query.where('sales' , '<=' , form.data.max_discount);
             }
 
 
             if(form.data.stock){
-                query.where('stock' , '=' , form.data.stock)
+                query.where('stock' , '=' , form.data.stock);
             }
 
 
             if(form.data.date){
-                query.where('date' , '=' , form.data.date)
-                console.log(form.data.combo)
+                query.where('date' , '=' , form.data.date);
             }
 
-            // if(form.data.combo == 1) {
-            //     query.where('combo', '=', form.data.combo);
-            // }
-            // else if(form.data.combo == 2){
-            //     query.where('combo', '=', form.data.combo);
-            // }
-            // else if(form.data.combo == 3){
-            //     query.where('combo', '=', form.data.combo);
-            // }
+            if(form.data.combo == 1) {
+                query.where('combo', '=', 1);
+            }
+            else if(form.data.combo == 2){
+                query.where('combo', '=', 2);
+            }
+            else if(form.data.combo == 3){
+                query.where('combo', '=', 3);
+            }
 
 
-            // if(form.data.themes){
-            //     query.query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', 'in', form.data.themes.split(','));
-            // }
+            if(form.data.themes){
+                query.query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', 'in', form.data.themes.split(','));
+            }
 
-            // const products = await query.fetch({
-            //     withRelated: ['themes']
-            // })
+            const products = await query.fetch({
+                withRelated: ['themes']
+            })
 
             res.render('products/index' , {
                 products: products.toJSON(),

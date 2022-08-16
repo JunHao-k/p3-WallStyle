@@ -95,18 +95,21 @@ const createVariantForm = () => {
 }
 
 const createSearchForm = (themes) => {
+
     return forms.create({
         'title': fields.string({
             'required': false,
             errorAfterField: true,
         }),
+        
         'on_sale': fields.string({
             required: false,
             errorAfterField: true,
             choices: [[0, "--- Item on sale ---"], [1 , "Yes"] , [2 , "No"]],
-            widget: widgets.select(),
-            
+            widget: widgets.select(),  
         }),
+        
+
         'min_discount': fields.number({
             required: false,
             errorAfterField: true,
@@ -123,23 +126,24 @@ const createSearchForm = (themes) => {
             validators: [validators.integer()]
         }),
         'date': fields.date({
-            required: true,
+            required: false,
             errorAfterField: true,
             widget: widgets.date()
         }),
         
-        // 'combo': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     choices: [[0, "--- Sets with different combinations ---"] , [1 , '1'] , [2 , '2'] , [3 , '3']],
-        //     widget: widgets.select()
-        // }),
-        // 'themes': fields.string({
-        //     required: false,
-        //     errorAfterField: true,
-        //     choices: themes,
-        //     widget: widgets.multipleSelect()
-        // })
+        'combo': fields.string({
+            required: false,
+            errorAfterField: true,
+            choices: [[0, "--- Sets with different combinations ---"] , [1 , '1'] , [2 , '2'] , [3 , '3']],
+            widget: widgets.select()
+        }),
+        
+        'themes': fields.string({
+            required: false,
+            errorAfterField: true,
+            choices: themes,
+            widget: widgets.multipleSelect()
+        })
     })
 }
 
