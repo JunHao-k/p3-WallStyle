@@ -57,7 +57,7 @@ router.post("/create" , async(req , res) => {
             if(form.data.themes){
                 await product.themes().attach(form.data.themes.split(','))
             }
-
+            req.flash("success_messages" , `New product ${product.get('title')} has been added`)
             res.redirect("/products")
         },
         'error': function(form){
@@ -139,6 +139,7 @@ router.post("/:product_id/update" , async(req , res) => {
             await product.themes().attach(themeIds);
 
             await product.save()
+            req.flash("success_messages" , `Product ${product.get('title')} has been updated`)
             res.redirect("/products")
         },
         'error': async(form) => {
@@ -165,6 +166,9 @@ router.post("/:product_id/update" , async(req , res) => {
 
 /* ---------------------------------------- END OF UPDATE for main products -------------------------------------- */
 
+
+/* ---------------------------------------- DELETE for main products -------------------------------------- */
+
 router.post("/:product_id/delete" , async(req , res) => {
     const product = await dataLayer.getProductById(req.params.product_id)
     let deleteResult = false
@@ -173,7 +177,7 @@ router.post("/:product_id/delete" , async(req , res) => {
     }
     product.destroy()
     if(deleteResult){
-        req.flash('success_messages' , "Model variant has been successfully deleted")
+        req.flash('success_messages' , "Product has been successfully deleted")
     }
     else{
         req.flash("error_messages" , "Delete unsuccessful. Please try again")
@@ -182,8 +186,13 @@ router.post("/:product_id/delete" , async(req , res) => {
     res.redirect(`/products`)
 })
 
+/* ---------------------------------------- END OF DELETE for main products -------------------------------------- */
 
 
+
+
+
+/* ------------------------------------------- GET FOR VARIANTS --------------------------------------------------- */
 
 
 router.get("/:product_id/variants" , async (req , res) => {
@@ -198,6 +207,14 @@ router.get("/:product_id/variants" , async (req , res) => {
     })
 })
 
+
+/* ---------------------------------------- END OF GET FOR VARIANTS -------------------------------------- */
+
+
+
+
+
+/* ------------------------------------------- CREATE FOR VARIANTS --------------------------------------------------- */
 
 
 
@@ -215,6 +232,7 @@ router.get("/:product_id/variants/create" , async (req , res) => {
 
 router.post("/:product_id/variants/create" , async (req , res) => {
     let productId = req.params.product_id
+    const product = await dataLayer.getProductById(productId)
     const variantForm = createVariantForm();
     variantForm.handle(req , {
         'success': async function(form){
@@ -228,6 +246,7 @@ router.post("/:product_id/variants/create" , async (req , res) => {
             variant.set('model_thumbnail' , form.data.model_thumbnail)
 
             await variant.save()
+            req.flash("success_messages" , `New model for ${product.get('title')} has been added`)
             res.redirect(`/products/${productId}/variants`)
         },
         'error': function(form){
@@ -249,6 +268,14 @@ router.post("/:product_id/variants/create" , async (req , res) => {
     })
 })
 
+
+
+/* ------------------------------------------- END OF CREATE FOR VARIANTS --------------------------------------------------- */
+
+
+
+
+/* ------------------------------------------- UPDATE FOR VARIANTS --------------------------------------------------- */
 
 router.get("/:product_id/variants/:variant_id/update" , async (req , res) => {
 
@@ -290,6 +317,7 @@ router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
             variant.set(variantData)
 
             await variant.save()
+            req.flash("success_messages" , `Model ${variant.get('model_name')} for ${product.get('title')} has been updated`)
             res.redirect(`/products/${req.params.product_id}/variants`)
         },
         'error': async(form) => {
@@ -313,6 +341,16 @@ router.post("/:product_id/variants/:variant_id/update" , async (req , res) => {
     })
 })
 
+/* ------------------------------------------- END OF UPDATE FOR VARIANTS --------------------------------------------------- */
+
+
+
+
+
+
+/* ------------------------------------------- DELETE FOR VARIANTS --------------------------------------------------- */
+
+
 router.post("/:product_id/variants/:variant_id/delete" , async (req , res) => {
     const variant = await dataLayer.getVariantById(req.params.variant_id)
     let productid = req.params.product_id
@@ -330,5 +368,9 @@ router.post("/:product_id/variants/:variant_id/delete" , async (req , res) => {
     
     res.redirect(`/products/${productid}/variants`)
 })
+
+
+/* ------------------------------------------- END OF DELETE FOR VARIANTS --------------------------------------------------- */
+
 
 module.exports = router
