@@ -4,6 +4,11 @@
     {{/block}}
     {{#block 'content'}}
         <h1>Products</h1>
+        <h2>Search</h2>
+        <form method="GET">
+            {{{form}}}
+            <input type="submit" value="Search" class="btn btn-primary my-3"/>
+        </form>
         <div class="btn-div"><a href="products/create" class="add-btn"><i class="fa-solid fa-plus" style=" font-size: 40px"></i></a></div>
         {{> flash}}
         <div class="product-table">

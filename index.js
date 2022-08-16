@@ -5,6 +5,7 @@ require("dotenv").config();
 const session = require('express-session')
 const flash = require('connect-flash')
 const FileStore = require('session-file-store')(session)
+const csrf = require('csurf')
 const helpers = require("handlebars-helpers")({
   handlebars: hbs.handlebars
 })
@@ -18,6 +19,13 @@ app.set("view engine", "hbs");
 // static folder
 app.use(express.static("public"));
 
+// enable forms
+app.use(
+  express.urlencoded({
+    extended: false
+  })
+);
+
 app.use(session({
   store: new FileStore(), // We want to use files to store sessions
   secret: process.env.SESSION_SECRET_KEY, // Used to generate the session id
@@ -25,14 +33,25 @@ app.use(session({
   saveUninitialized: true // If a new browser connects do we create a new session
 }))
 
-app.use(flash())
 
+app.use(flash())
 // Register Flash messages
 app.use(function(req, res, next){
   res.locals.success_messages = req.flash("success_messages")
   res.locals.error_messages = req.flash("error_messages")
   next()
 })
+
+// Enable CSRF protection
+app.use(csrf())
+app.use(function (req, res, next) {
+  // The csrfToken function is avaliable because of `app.use(csrf())`
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
+
+
+
 
 // Set hbs partials
 hbs.registerPartials("./views/partials")
@@ -41,12 +60,7 @@ hbs.registerPartials("./views/partials")
 wax.on(hbs.handlebars);
 wax.setLayoutPath("./views/layouts");
 
-// enable forms
-app.use(
-  express.urlencoded({
-    extended: false
-  })
-);
+
 
 
 

@@ -34,6 +34,7 @@
         form.method = 'post';
         
         form.action = `/products/${event.target.dataset.productid}/variants/${event.target.dataset.variantid}/delete`
+        form.innerHTML = <input type = "hidden" value="{{csrfToken}}" name="_csrf"/>
         if(toRemove == 'product') {
           form.action = `/products/${event.target.dataset.productid}/delete`;
         }

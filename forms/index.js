@@ -90,8 +90,57 @@ const createVariantForm = () => {
             required: true,
             errorAfterField: true,
             widget: widgets.date()
-        }),
+        })
     })
 }
 
-module.exports = { createProductForm , createVariantForm, bootstrapField  }
+const createSearchForm = (themes) => {
+    return forms.create({
+        'title': fields.string({
+            'required': false,
+            errorAfterField: true,
+        }),
+        'on_sale': fields.string({
+            required: false,
+            errorAfterField: true,
+            choices: [[0, "--- Item on sale ---"], [1 , "Yes"] , [2 , "No"]],
+            widget: widgets.select(),
+            
+        }),
+        'min_discount': fields.number({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer()]
+        }),
+        'max_discount': fields.number({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer()]
+        }),
+        'stock': fields.number({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer()]
+        }),
+        'date': fields.date({
+            required: true,
+            errorAfterField: true,
+            widget: widgets.date()
+        }),
+        
+        // 'combo': fields.string({
+        //     required: false,
+        //     errorAfterField: true,
+        //     choices: [[0, "--- Sets with different combinations ---"] , [1 , '1'] , [2 , '2'] , [3 , '3']],
+        //     widget: widgets.select()
+        // }),
+        // 'themes': fields.string({
+        //     required: false,
+        //     errorAfterField: true,
+        //     choices: themes,
+        //     widget: widgets.multipleSelect()
+        // })
+    })
+}
+
+module.exports = { createProductForm , createVariantForm, createSearchForm, bootstrapField  }

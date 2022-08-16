@@ -1,16 +1,98 @@
 const express = require("express")
 const router = express.Router()
 const { Product, Theme, Variant } = require('../models')
-const { bootstrapField, createVariantForm, createProductForm } = require('../forms');
+const { bootstrapField, createVariantForm, createProductForm, createSearchForm } = require('../forms');
 const dataLayer = require('../dal/products')
 
 
 /* -------------------------------------- READ for main products ---------------------------------- */
 router.get("/" , async(req , res) => {
-    let products = await dataLayer.getAllProducts()
-    res.render('products/index' , {
-        'products': products.toJSON()
+
+    // Get all the possible themes
+    const themes = await dataLayer.getAllThemes()
+    themes.unshift([0 , '--- Any Theme ---'])
+
+    // Create an instance of the search form
+    const searchForm = createSearchForm(themes)
+
+    // Create a query builder
+    let query = Product.collection()
+
+    // Search logic begins here:
+    searchForm.handle(req , {
+        'success': async function(form){
+            console.log("-----------------------" , form.data)
+            if(form.data.title){
+                query.where('title' , 'like' , '%' + form.data.title + '%')
+            }
+
+            
+            if(form.data.on_sale == 1) {
+                query.where('sales', '=', 0);
+            }
+            else if(form.data.on_sale == 2){
+                query.where('sales', '!=', 0);
+            }
+            
+            
+            
+            
+
+            if(form.data.min_discount){
+                query.where('sales' , '>=' , form.data.min_discount)
+            }
+            if(form.data.max_discount){
+                query.where('sales' , '<=' , form.data.max_discount)
+            }
+
+
+            if(form.data.stock){
+                query.where('stock' , '=' , form.data.stock)
+            }
+
+
+            if(form.data.date){
+                query.where('date' , '=' , form.data.date)
+                console.log(form.data.combo)
+            }
+
+            // if(form.data.combo == 1) {
+            //     query.where('combo', '=', form.data.combo);
+            // }
+            // else if(form.data.combo == 2){
+            //     query.where('combo', '=', form.data.combo);
+            // }
+            // else if(form.data.combo == 3){
+            //     query.where('combo', '=', form.data.combo);
+            // }
+
+
+            // if(form.data.themes){
+            //     query.query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', 'in', form.data.themes.split(','));
+            // }
+
+            // const products = await query.fetch({
+            //     withRelated: ['themes']
+            // })
+
+            res.render('products/index' , {
+                products: products.toJSON(),
+                form: form.toHTML(bootstrapField)
+            })
+        },
+        'empty': async function(form){
+            const products = await dataLayer.getAllProducts()
+            res.render('products/index' , {
+                products: products.toJSON(),
+                form: form.toHTML(bootstrapField)
+            })
+        }
     })
+
+    // let products = await dataLayer.getAllProducts()
+    // res.render('products/index' , {
+    //     'products': products.toJSON()
+    // })
 })
 
 /* -------------------------------------- END OF READ for main products ---------------------------------- */
