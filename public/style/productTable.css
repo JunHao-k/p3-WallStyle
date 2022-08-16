@@ -70,3 +70,10 @@ tr{
     color: black;
     /* transition: 0.25s ease; */
 }
+
+.accordion-button:focus {
+    box-shadow: 0 2px 20px 0.2rem rgba(52, 58, 64, 0.25);
+    border-color: rgba(0,0,0,.125);
+    background-color: white;
+    color: black
+}
