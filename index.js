@@ -69,10 +69,12 @@ wax.setLayoutPath("./views/layouts");
 const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')
 const cloudinaryRoutes = require('./routes/cloudinary.js')
+const accountRoutes = require('./routes/accounts.js')
 
 app.use("/", landingRoutes)
 app.use("/products", productRoutes)
 app.use('/cloudinary', cloudinaryRoutes)
+app.use('/accounts' , accountRoutes)
 
 
 

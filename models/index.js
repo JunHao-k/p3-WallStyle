@@ -24,4 +24,18 @@ const Variant = bookshelf.model('Variant' , {
     }
 })
 
-module.exports = { Product, Theme, Variant }
+const Role = bookshelf.model('Role' , {
+    tableName: 'roles',
+    accounts: function(){
+        return this.hasMany('Account')
+    }
+})
+
+const Account = bookshelf.model('Account' , {
+    tableName: 'accounts',
+    role: function(){
+        return this.belongsTo('Role')
+    },
+})
+
+module.exports = { Product, Theme, Variant, Role, Account }

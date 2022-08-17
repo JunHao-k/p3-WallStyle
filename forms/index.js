@@ -147,4 +147,38 @@ const createSearchForm = (themes) => {
     })
 }
 
-module.exports = { createProductForm , createVariantForm, createSearchForm, bootstrapField  }
+const createAccountForm = (roles) => {
+    return forms.create({
+        'email': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'first_name': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'last_name': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'password': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'confirm_password': fields.password({
+            required: true,
+            errorAfterField: true,
+            // ensure that the value for confirm_password matches that of the password field
+            validators: [validators.matchField('password')]
+        }),
+        'role_id': fields.string({
+            label: 'Role', // Customise the label in hbs to show "Role" instead of "role_id"
+            required: true,
+            errorAfterField: true,
+            widget: widgets.select(), 
+            choices: roles
+        })
+    })
+}
+
+module.exports = { createProductForm , createVariantForm, createSearchForm, createAccountForm, bootstrapField  }
