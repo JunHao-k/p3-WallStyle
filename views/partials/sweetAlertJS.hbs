@@ -7,7 +7,7 @@
     btn.addEventListener('click', async function (event) {
       // Suppress default behavior of element
       event.preventDefault();
-    
+      console.log(event.target.dataset.item)
       // Choose either variant or product to delete, product/variant passed into target "variable"
       const toRemove = "{{target}}"; 
       let title = `${event.target.dataset.item} will be removed. Do you want to continue with this action?`;
