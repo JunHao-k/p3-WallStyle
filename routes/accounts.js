@@ -76,22 +76,28 @@ router.post('/login' , async (req , res) => {
             })
 
 
-
             // Check if the user does not exist
             if(!account){
                 req.flash("error_messages" , "Invalid credentials")
                 res.redirect("/accounts/login");
             }
             else{
-                req.session.account = {
-                    id: account.get('id'),
-                    email: account.get('email'),
-                    first_name: account.get('first_name'),
-                    last_name: account.get('last_name'),
-                    role_id: account.get('role_id')
+                if(account.get('role_id') == 1){
+                    req.session.account = {
+                        id: account.get('id'),
+                        email: account.get('email'),
+                        first_name: account.get('first_name'),
+                        last_name: account.get('last_name'),
+                        role_id: account.get('role_id')
+                    }
+                    req.flash('success_messages' , 'Welcome back, ' + account.get('first_name') + ' ' + account.get('last_name'))
+                    res.redirect('/products')
                 }
-                req.flash('success_messages' , 'Welcome back, ' + account.get('first_name') + account.get('last_name'))
-                res.redirect('/products')
+                else{
+                    req.flash("error_messages" , "Your account is not authorised to view this page, please use the correct account")
+                    res.redirect("/accounts/login");
+                }
+                
             }
         },
         'error': function(form){
