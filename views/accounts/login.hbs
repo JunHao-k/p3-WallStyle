@@ -1,11 +1,12 @@
 {{#extends 'base'}}
-    {{#block "content"}}
-        <h1>Sign Up</h1>
+    {{#block 'content'}}
+        <h1>Login</h1>
         {{> flash}}
         <form method = "POST">
             {{{form}}}
+            {{!-- Name _csrf is required! --}}
             <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
-            <input type = "submit" class = "btn btn-dark btn-outline-light"/>
+            <input type="submit" value="Login" class="btn btn-primary my-3"/>
         </form>
     {{/block}}
 {{/extends}}
