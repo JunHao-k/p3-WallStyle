@@ -12,7 +12,7 @@
                     Select search filters
                 </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <form method="GET">
                         {{{form}}}
@@ -61,8 +61,8 @@
                             <td>
                                 <a href="products/{{this.id}}/update" class="btn btn-dark btn-outline-light"><i class="fa-solid fa-pen-to-square"></i></a>
                                 <a 
-                                    href="products/{{this.id}}/delete"
-                                    data-productitem="Product {{this.title}}"
+                                    href="#"
+                                    data-productitem="{{this.title}}"
                                     data-productid="{{this.id}}"
                                     class="deleteBtn btn btn-dark btn-outline-light">
                                     <i class="fa-solid fa-trash-can"></i>

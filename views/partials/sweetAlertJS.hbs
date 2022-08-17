@@ -1,6 +1,6 @@
 {{!-- Sweet Alert JS --}}
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script> --}}
 <script>
   let deleteBtns = document.querySelectorAll('.deleteBtn');
   for (let btn of deleteBtns) {
@@ -13,13 +13,13 @@
       let title = `${event.target.dataset.item} will be removed. Do you want to continue with this action?`;
       // Removal message
       if(toRemove == "product"){
-        title = `${event.target.dataset.productitem} will be removed. Do you want to continue with this action?`
+        title = `Product ${event.target.dataset.productitem} will be removed. Do you want to continue with this action?`
       }
       
 
       const result = await Swal.fire({
         'title': title,
-        'icon': 'error',
+        'icon': 'warning',
         'confirmButtonText': 'Yes delete',
         'cancelButtonText': 'No cancel',
         'showCloseButton': true,
@@ -32,17 +32,15 @@
         // Process the delete operation (the only way to redirect browser to a POST route is by submitting an empty form)
         const form = document.createElement('form');
         form.method = 'post';
-        
+        form.innerHTML = '<input type = "hidden" value="{{csrfToken}}" name="_csrf"/>'
         form.action = `/products/${event.target.dataset.productid}/variants/${event.target.dataset.variantid}/delete`
-        form.innerHTML = <input type = "hidden" value="{{csrfToken}}" name="_csrf"/>
         if(toRemove == 'product') {
           form.action = `/products/${event.target.dataset.productid}/delete`;
         }
 
         //form.action = `/products/${event.target.dataset.productId}/delete`;
-        
-        
         document.querySelector('body').appendChild(form); // Connect hidden form to document body
+        
         form.submit(); // Submit delete form with a function call
       }
     })
