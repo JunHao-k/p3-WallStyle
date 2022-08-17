@@ -42,6 +42,12 @@ app.use(function(req, res, next){
   next()
 })
 
+// Share the account data with hbs files
+app.use(function (req, res, next) {
+  res.locals.account = req.session.account;
+  next()
+})
+
 // Enable CSRF protection
 app.use(csrf())
 app.use(function (req, res, next) {

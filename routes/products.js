@@ -3,6 +3,7 @@ const router = express.Router()
 const { Product, Theme, Variant } = require('../models')
 const { bootstrapField, createVariantForm, createProductForm, createSearchForm } = require('../forms');
 const dataLayer = require('../dal/products')
+const { checkIfLoggedIn, checkIfAuthorised } = require('../middlewares');
 
 
 /* -------------------------------------- READ for main products ---------------------------------- */
@@ -102,7 +103,7 @@ router.get("/" , async(req , res) => {
 
 /* ---------------------------------------- CREATE for main products -------------------------------------- */
 
-router.get("/create" , async(req , res) => {
+router.get("/create" , checkIfLoggedIn, checkIfAuthorised, async(req , res) => {
 
     const themes = await dataLayer.getAllThemes()
 
@@ -168,7 +169,7 @@ router.post("/create" , async(req , res) => {
 
 /* ---------------------------------------- UPDATE for main products -------------------------------------- */
 
-router.get("/:product_id/update" , async(req , res) => {
+router.get("/:product_id/update" , checkIfLoggedIn , checkIfAuthorised ,  async(req , res) => {
 
     const product = await dataLayer.getProductById(req.params.product_id)
     const themes = await dataLayer.getAllThemes()
@@ -299,7 +300,7 @@ router.get("/:product_id/variants" , async (req , res) => {
 
 
 
-router.get("/:product_id/variants/create" , async (req , res) => {
+router.get("/:product_id/variants/create" , checkIfLoggedIn , checkIfAuthorised , async (req , res) => {
     
     const variantForm = createVariantForm();
 
@@ -358,7 +359,7 @@ router.post("/:product_id/variants/create" , async (req , res) => {
 
 /* ------------------------------------------- UPDATE FOR VARIANTS --------------------------------------------------- */
 
-router.get("/:product_id/variants/:variant_id/update" , async (req , res) => {
+router.get("/:product_id/variants/:variant_id/update" , checkIfLoggedIn , checkIfAuthorised , async (req , res) => {
 
     const variant = await dataLayer.getVariantById(req.params.variant_id)
 
