@@ -1,12 +1,19 @@
 {{#extends 'base'}}
+    {{#block 'css'}}
+        <link rel="stylesheet" href="/style/login.css">
+    {{/block}}
     {{#block 'content'}}
-        <h1>Login</h1>
-        {{> flash}}
-        <form method = "POST">
-            {{{form}}}
-            {{!-- Name _csrf is required! --}}
-            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
-            <input type="submit" value="Login" class="btn btn-primary my-3"/>
-        </form>
+        <div id="login-container">
+            <div id="login">
+                <h1>Log in with your account</h1>
+                {{> flash}}
+                <form method="POST">
+                    {{{form}}}
+                    {{!-- Name _csrf is required! --}}
+                    <input type="hidden" value="{{csrfToken}}" name="_csrf" />
+                    <input type="submit" value="Login" class="btn btn-dark btn-outline-light mt-3" />
+                </form>
+            </div>
+        </div>
     {{/block}}
 {{/extends}}

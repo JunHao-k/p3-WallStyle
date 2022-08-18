@@ -9,7 +9,7 @@ const { checkIfLoggedIn, checkIfAuthorised } = require('../middlewares');
 /* -------------------------------------- READ for main products ---------------------------------- */
 
 
-router.get("/" , async(req , res) => {
+router.get("/" , checkIfLoggedIn , async(req , res) => {
 
     // Get all the possible themes
     const themes = await dataLayer.getAllThemes()
@@ -277,7 +277,7 @@ router.post("/:product_id/delete" , async(req , res) => {
 /* ------------------------------------------- GET FOR VARIANTS --------------------------------------------------- */
 
 
-router.get("/:product_id/variants" , async (req , res) => {
+router.get("/:product_id/variants" , checkIfLoggedIn , async (req , res) => {
 
     const variants = await dataLayer.getVariantsByProductId(req.params.product_id)
 

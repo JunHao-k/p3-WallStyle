@@ -1,0 +1,19 @@
+#login-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#login{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #d6d6d6;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 300px;
+    max-width: 50%;
+    margin-left: 300px;
+}
