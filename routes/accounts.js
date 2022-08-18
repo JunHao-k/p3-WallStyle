@@ -5,6 +5,7 @@ const crypto = require('crypto')
 const { Role, Account } = require("../models")
 const { createAccountForm, createLoginForm, bootstrapField } = require("../forms")
 const accountDataLayer = require('../dal/accounts')
+const { checkIfLoggedIn, checkIfAuthorised } = require('../middlewares');
 
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
@@ -22,7 +23,7 @@ router.get('/signup' , async function(req , res){
     })
 })
 
-router.post('/signup' , async function(req , res){
+router.post('/signup' , checkIfLoggedIn, checkIfAuthorised, async function(req , res){
 
     const roles = await accountDataLayer.getAllRoles()
     const accountForm = createAccountForm(roles);
