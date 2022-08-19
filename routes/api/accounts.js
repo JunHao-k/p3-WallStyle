@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
+const { checkIfAuthenticatedJWT } = require("../../middlewares")
 
 const generateAccessToken = function(account , tokenSecret , expiry){
     return jwt.sign({
@@ -32,6 +33,7 @@ router.post('/login' , async function(req , res){
         require: false
     })
     if(account){
+        // Access token should be in react state
         const accessToken = generateAccessToken(account , process.env.TOKEN_SECRET, '1h')
         res.send({
             accessToken
@@ -43,6 +45,11 @@ router.post('/login' , async function(req , res){
             'error': 'Invalid login credentials'
         })
     }
+})
+
+router.get("/profile" , checkIfAuthenticatedJWT, function(req,res){
+    const account = req.account
+    res.json(account)
 })
 
 

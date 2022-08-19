@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken')
+
+
 const checkIfLoggedIn = function(req , res , next){
     const account = req.session.account
     if(!account){
@@ -20,5 +23,33 @@ const checkIfAuthorised = function(req , res , next){
     }
 }
 
+checkIfAuthenticatedJWT = function(req , res , next){
+    // Extract out the authorization headers
+    const authHeader = req.headers.authorization
+    if(authHeader){
+        // Extract out the JWT and check if it is valid
+        const token = authHeader.split(" ")[1]
+        jwt.verify(token, process.env.TOKEN_SECRET, function(err , tokenData){
+            // tokenData is the data we embedded into the JWT as payload
+            if(err){
+                res.status(401);
+                res.json({
+                    'error': "Invalid access token"
+                })
+            }
+            else{
+                req.account = tokenData
+                next()
+            }
+        })
+        next()
+    }
+    else{
+        res.status(401)
+        res.json({
+            'error': 'No authorization headers found'
+        })
+    }
+}
 
-module.exports = { checkIfLoggedIn, checkIfAuthorised }
+module.exports = { checkIfLoggedIn, checkIfAuthorised, checkIfAuthenticatedJWT }
