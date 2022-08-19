@@ -6,6 +6,7 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const FileStore = require('session-file-store')(session)
 const csrf = require('csurf')
+const jwt = require('jsonwebtoken')
 const helpers = require("handlebars-helpers")({
   handlebars: hbs.handlebars
 })
@@ -49,15 +50,22 @@ app.use(function (req, res, next) {
 })
 
 // Enable CSRF protection
-app.use(csrf())
+const csrfInstance = csrf();
 app.use(function (req, res, next) {
-  // The csrfToken function is avaliable because of `app.use(csrf())`
-  res.locals.csrfToken = req.csrfToken()
-  next()
-})
-
-
-
+  if (req.url === '/checkout/process_payment' || req.url.slice(0, 5) == '/api/') {
+    next();
+  }
+  else {
+    csrfInstance(req, res, next);
+  }
+});
+app.use(function (req, res, next) {
+  // Check if req.csrfToken is available
+  if (req.csrfToken) {
+    res.locals.csrfToken = req.csrfToken();
+  }
+  next();
+});
 
 // Set hbs partials
 hbs.registerPartials("./views/partials")
@@ -76,11 +84,15 @@ const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')
 const cloudinaryRoutes = require('./routes/cloudinary.js')
 const accountRoutes = require('./routes/accounts.js')
+const api = {
+  accounts: require('./routes/api/accounts')
+}
 
 app.use("/", landingRoutes)
 app.use("/products", productRoutes)
 app.use('/cloudinary', cloudinaryRoutes)
 app.use('/accounts' , accountRoutes)
+app.use('/api/accounts' , express.json(), api.accounts)
 
 
 
