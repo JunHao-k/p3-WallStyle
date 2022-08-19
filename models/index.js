@@ -38,4 +38,9 @@ const Account = bookshelf.model('Account' , {
     },
 })
 
-module.exports = { Product, Theme, Variant, Role, Account }
+const BlacklistedToken = bookshelf.model('BlacklistedToken' , {
+    tableName:'blacklisted_tokens'
+})
+
+
+module.exports = { Product, Theme, Variant, Role, Account, BlacklistedToken }

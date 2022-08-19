@@ -16,6 +16,22 @@ const generateAccessToken = function(account , tokenSecret , expiry){
     })
 }
 
+const refreshAccessToken = function(
+    first_name,
+    last_name,
+    id,
+    role_id,
+    email,
+    tokenSecret,
+    expiry
+){
+    return jwt.sign({
+        first_name, last_name, id, role_id, email,
+    } , tokenSecret, {
+        expiresIn: expiry
+    })
+}
+
 const getHashedPassword = (password) => {
     const sha256 = crypto.createHash('sha256');
     // The output will be converted to hexdecimal
@@ -35,8 +51,10 @@ router.post('/login' , async function(req , res){
     if(account){
         // Access token should be in react state
         const accessToken = generateAccessToken(account , process.env.TOKEN_SECRET, '1h')
+        const refreshToken = generateAccessToken(account, process.env.REFRESH_TOKEN_SECRET, '7d')
         res.send({
-            accessToken
+            accessToken,
+            refreshToken
         })
     }
     else{
@@ -50,6 +68,48 @@ router.post('/login' , async function(req , res){
 router.get("/profile" , checkIfAuthenticatedJWT, function(req,res){
     const account = req.account
     res.json(account)
+})
+
+// Route to get new access token
+router.post('/refresh' , async function(req,res){
+    // Get refresh token from the body
+    const refreshToken = req.body.refreshToken
+    if(refreshToken){
+        // Verify if it is legit
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, function(err, tokenData){
+            if(!err){
+                console.log(tokenData)
+                const accessToken = refreshAccessToken(
+                    tokenData.first_name,
+                    tokenData.last_name,
+                    tokenData.id,
+                    tokenData.role_id,
+                    tokenData.email, 
+                    process.env.TOKEN_SECRET, 
+                    '1h'
+                )
+                res.json({
+                    accessToken
+                })
+            }
+            else{
+                res.status(400)
+                res.json({
+                    'error': 'Invalid refresh token'
+                })
+            }
+        })
+    }
+    else{
+        res.status(400)
+        res.json({
+            'error': 'No refresh token found'
+        })
+    }
+})
+
+router.post('/logout' , async function(req,res){
+    
 })
 
 
