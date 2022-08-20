@@ -88,9 +88,6 @@ router.post('/register' , async function(req, res){
         res.json(customer)
     }
 
-    
-
-
 })
 
 router.post('/login' , async function(req , res){
@@ -101,16 +98,25 @@ router.post('/login' , async function(req , res){
         require: false
     })
     if(account){
-        // Access token should be in react state
-        const accessToken = generateAccessToken(account , process.env.TOKEN_SECRET, '1h')
-        const refreshToken = generateAccessToken(account, process.env.REFRESH_TOKEN_SECRET, '7d')
-        res.send({
-            accessToken,
-            refreshToken
-        })
+        if(account.get('role_id') == 3){
+            // Access token should be in react state
+            const accessToken = generateAccessToken(account , process.env.TOKEN_SECRET, '1h')
+            const refreshToken = generateAccessToken(account, process.env.REFRESH_TOKEN_SECRET, '7d')
+            res.send({
+                accessToken,
+                refreshToken
+            })
+        }
+        else{
+            res.status(400)
+            res.json({
+                'error': 'Invalid login credentials'
+            })
+        }
+        
     }
     else{
-        res.sendStatus(401)
+        res.status(401)
         res.json({
             'error': 'Invalid login credentials'
         })

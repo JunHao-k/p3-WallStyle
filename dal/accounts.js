@@ -24,8 +24,9 @@ const addCustomerAcct = async (customerData) => {
     customerData.modified_date = new Date()
     account.set(customerData)
     await account.save()
-
     return account
 }
+
+
 
 module.exports = { getAllRoles, addCustomerAcct }
