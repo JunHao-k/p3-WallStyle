@@ -39,7 +39,7 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
-const { Account } = require('../../models')
+const { Account, BlacklistedToken } = require('../../models')
 
 router.post('/login' , async function(req , res){
     const account = await Account.where({
@@ -75,6 +75,24 @@ router.post('/refresh' , async function(req,res){
     // Get refresh token from the body
     const refreshToken = req.body.refreshToken
     if(refreshToken){
+
+        // Check if the token is already blacklisted
+        const blacklistedToken = await BlacklistedToken.where({
+            'token': refreshToken
+        }).fetch({
+            require: false
+        })
+
+        // If the blacklisted Token is not null, then it means it exists
+        if(blacklistedToken){
+            res.status(400)
+            res.json({
+                'error': 'Refresh token has been blacklisted'
+            })
+            return // return put here to end the function directly if blacklistedtoken exists in the blacklisted tokens table
+        }
+
+
         // Verify if it is legit
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, function(err, tokenData){
             if(!err){
@@ -109,7 +127,30 @@ router.post('/refresh' , async function(req,res){
 })
 
 router.post('/logout' , async function(req,res){
-    
+    const refreshToken = req.body.refreshToken;
+    if(refreshToken){
+
+        
+        // Verify if the refresh token is legit
+        jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET, async function(err, tokenData){
+            if(!err){
+                // Add the refresh token to the blacklist
+                const token = new BlacklistedToken()
+                token.set('token' , refreshToken)
+                token.set('date_created' , new Date())
+                await token.save()
+                res.json({
+                    'message': 'Logged out'
+                })
+            }
+        })
+    }
+    else{
+        res.status(400);
+        res.json({
+            'error': 'No refresh token found!'
+        })
+    }
 })
 
 
