@@ -43,4 +43,40 @@ const BlacklistedToken = bookshelf.model('BlacklistedToken' , {
 })
 
 
-module.exports = { Product, Theme, Variant, Role, Account, BlacklistedToken }
+
+
+
+const Dimension = bookshelf.model('Dimension' , {
+    tableName: 'dimensions',
+    dimension: function(){
+        return this.hasMany('CartItem')
+    }
+})
+
+const Frame = bookshelf.model('Frame' , {
+    tableName: 'frames',
+    frame: function(){
+        return this.hasMany('CartItem')
+    }
+})
+
+
+const CartItem = bookshelf.model('CartItem' , {
+    tableName: 'cart_items',
+    dimension: function(){
+        return this.belongsTo('Dimension')
+    },
+    frame: function(){
+        return this.belongsTo('Frame')
+    },
+    variant: function(){
+        return this.belongsTo('Variant')
+    },
+    account: function(){
+        return this.belongsTo('Account')
+    }
+
+})
+
+
+module.exports = { Product, Theme, Variant, Role, Account, BlacklistedToken, Dimension, Frame, CartItem }
