@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
+const userDataLayer = require('../../dal/accounts');
 const { checkIfAuthenticatedJWT } = require("../../middlewares")
 
 const generateAccessToken = function(account , tokenSecret , expiry){
@@ -40,6 +41,57 @@ const getHashedPassword = (password) => {
 }
 
 const { Account, BlacklistedToken } = require('../../models')
+
+router.post('/register' , async function(req, res){
+    let fieldError = {}
+    let customerData = {}
+    let emailRegex = /^[\w#][\w\.\’+#](.[\w\\’#]+)\@[a-zA-Z0-9]+(.[a-zA-Z0-9]+)*(.[a-zA-Z]{2,20})$/
+    let haveErr = false
+
+    const email = req.body.email
+    const emailLength = email.length == 0 || email.length > 320
+    const emailError = !email.match(emailRegex) || emailLength
+    emailError ? fieldError.email = "Please enter a valid email" : ""
+
+    const password = req.body.password
+    const passwordError = password.length == 0 || password.length > 200
+    passwordError ? fieldError.password = "Password length must not exceed 200 characters" : ""
+
+    const first_name = req.body.first_name
+    const first_nameError = first_name.length == 0 || first_name.length > 100
+    first_nameError ? fieldError.first_name = "First name length must not exceed 100 characters" : ""
+
+    const last_name = req.body.last_name
+    const last_nameError = last_name.length == 0 || last_name.length > 100
+    last_nameError ? fieldError.last_name = "Last name length must not exceed 100 characters" : ""
+
+    console.log(fieldError)
+
+    for(const [key, value] of Object.entries(fieldError)){
+        if(value.length > 0){
+            haveErr = true
+            break;
+        }
+    }
+
+    if(haveErr){
+        res.status(400)
+        res.json(fieldError)
+    }
+    else{
+        customerData = {
+            email, password, first_name, last_name
+        }
+        console.log(customerData)
+        const customer = await userDataLayer.addCustomerAcct(customerData)
+        res.status(201)
+        res.json(customer)
+    }
+
+    
+
+
+})
 
 router.post('/login' , async function(req , res){
     const account = await Account.where({
@@ -129,8 +181,6 @@ router.post('/refresh' , async function(req,res){
 router.post('/logout' , async function(req,res){
     const refreshToken = req.body.refreshToken;
     if(refreshToken){
-
-        
         // Verify if the refresh token is legit
         jwt.verify(refreshToken , process.env.REFRESH_TOKEN_SECRET, async function(err, tokenData){
             if(!err){
