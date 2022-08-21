@@ -1,4 +1,4 @@
-const { CartItem, Frame, Dimension } = require("../models")
+const { CartItem } = require("../models")
 
 const getCart = async(accountId) => {
     return await CartItem.collection().where({
@@ -9,38 +9,42 @@ const getCart = async(accountId) => {
     })
 }
 
-
-
-const getFrameById = async(frameId) => {
-    return await Frame.where({
-        'id': frameId
-    }).fetch({
-        require: false
-    })
-}
-
-const getDimensionById = async(dimensionId) => {
-    return await Dimension.where({
-        'id': dimensionId
-    }).fetch({
-        require: false
-    })
-}
-
-const getCartItem = async(accountId , variantId) => {
+const getCartItem = async(accountId , variantId , frameId, dimensionId) => {
     return await CartItem.where({
         'account_id': accountId,
-        'variant_id': variantId
+        'variant_id': variantId,
+        'frame_id': frameId,
+        'dimension_id': dimensionId
     }).fetch({
-        require: false
+        require: false,
+        withRelated: ['dimension' , 'frame' , 'variant' , 'variant.product' , 'account' , 'account.role']
     })
 }
 
-const getFrameCost = async(accountId , variantId) => {
-    const cartItem = await getCartItem(accountId , variantId)
-    let frameCost = cartItem.related('frame').get('frame_cost')
-    let productStock = cartItem.related('variant.product').get('stock')
+const getCartItemByCartId = async(accountId , variantId , cartId) => {
+    return await CartItem.where({
+        'account_id': accountId,
+        'variant_id': variantId,
+        'id': cartId
+    }).fetch({
+        require: false,
+        withRelated: ['dimension' , 'frame' , 'variant' , 'variant.product' , 'account' , 'account.role']
+    })
 }
+
+const getCartItemsByVariant = async(accountId , variantId) => {
+    return await CartItem.collection().where({
+        'account_id': accountId,
+        'variant_id': variantId,
+        // 'frame_id': frameId,
+        // 'dimension_id': dimensionId
+    }).fetch({
+        require: false,
+        withRelated: ['dimension' , 'frame' , 'variant' , 'variant.product' , 'account' , 'account.role']
+    })
+}
+
+
 
 const createCartItem = async(accountId , variantId , frameId , dimensionId , quantity) => {
     const cartItem = new CartItem({
@@ -54,10 +58,12 @@ const createCartItem = async(accountId , variantId , frameId , dimensionId , qua
     return cartItem
 }
 
-const updateItemQuantity = async(accountId , variantId, newQuantity) => {
-    const cartItem = await getCartItem(accountId , variantId)
+const updateItemQuantity = async(accountId , variantId, newQuantity , frameId, dimensionId) => {
+    const cartItem = await getCartItem(accountId , variantId, frameId, dimensionId)
     if(cartItem){
         cartItem.set('quantity' , newQuantity)
+        // cartItem.set('frame_id' , frameId)
+        // cartItem.set('dimension_id' , dimensionId)
         await cartItem.save()
         return true
     }
@@ -66,8 +72,8 @@ const updateItemQuantity = async(accountId , variantId, newQuantity) => {
     }
 }
 
-const removeCartItem = async (accountId , variantId) => {
-    const cartItem = await getCartItem(accountId , variantId)
+const removeCartItem = async (accountId , variantId, cartId) => {
+    const cartItem = await getCartItemByCartId(accountId , variantId, cartId)
     if(cartItem){
         await cartItem.destroy()
         return true
@@ -79,4 +85,4 @@ const removeCartItem = async (accountId , variantId) => {
 
 
 
-module.exports = { getCart, getCartItem, createCartItem, updateItemQuantity, removeCartItem, getFrameById, getDimensionById }
+module.exports = { getCart, getCartItem, createCartItem, updateItemQuantity, removeCartItem, getCartItemsByVariant, getCartItemByCartId }

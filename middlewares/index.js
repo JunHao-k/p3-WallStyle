@@ -42,13 +42,14 @@ checkIfAuthenticatedJWT = function(req , res , next){
                 next()
             }
         })
-        next()
+        
     }
     else{
         res.status(401)
         res.json({
             'error': 'No authorization headers found'
         })
+        return
     }
 }
 
