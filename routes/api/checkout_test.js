@@ -6,7 +6,7 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY , {
  });
 
 router.get('/' , async (req , res) => {
-    const accountId = req.account.id
+    const accountId = 11
     const cartItems = (await cartServices.getCart(accountId)).toJSON()
     let lineItems = []
 	let meta = []
@@ -50,11 +50,15 @@ router.get('/' , async (req , res) => {
         mode: 'payment'
     }
     let stripeSession = await Stripe.checkout.sessions.create(payment)
-    res.status(200)
-    res.json({
+    res.render("testing/checkout" , {
         sessionId: stripeSession.id,
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
     })
+    
+})
+
+router.get("/success" , function (req , res){
+    res.send("Payment success")
 })
 
 module.exports = router

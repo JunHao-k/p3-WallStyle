@@ -84,7 +84,9 @@ const accountRoutes = require('./routes/accounts.js');
 const { checkIfAuthenticatedJWT } = require("./middlewares");
 const api = {
   accounts: require('./routes/api/accounts'),
-  shopping_cart: require('./routes/api/shoppingcart')
+  shopping_cart: require('./routes/api/shoppingcart'),
+  checkout: require('./routes/api/checkout'),
+  checkout_test: require('./routes/api/checkout_test')
 }
 
 app.use("/", landingRoutes)
@@ -94,8 +96,8 @@ app.use('/accounts' , accountRoutes)
 
 app.use('/api/accounts' , express.json(), api.accounts)
 app.use('/api/cart' , express.json(), checkIfAuthenticatedJWT, api.shopping_cart)
-
-
+app.use('/api/checkout' , express.json(), checkIfAuthenticatedJWT, api.checkout)
+app.use('/api/checkout_test' , express.json(),  api.checkout_test)
 
 
 // async function main() {

@@ -24,14 +24,14 @@ const getComponentsCost = async (accountId , variantId, frameId, dimensionId) =>
 }
 
 const getDiscount = async (accountId , variantId, frameId, dimensionId) => {
-    const cartItem = await cartDataLayer.getCartItem(accountId , variantId, frameId, dimensionId)
-    let discountValue = cartItem.related('variant.product').get('sales')
+    const cartItem = (await cartDataLayer.getCartItem(accountId , variantId, frameId, dimensionId)).toJSON()
+    let discountValue = cartItem.variant.product.sales
     return discountValue
 }
 
-const getTotalCost = async (accountId , variantId) => {
-    const discountValue = await getDiscount(accountId , variantId)
-    const componentCost = await getComponentsCost(accountId , variantId)
+const getTotalCost = async (accountId , variantId, frameId, dimensionId) => {
+    const discountValue = await getDiscount(accountId , variantId, frameId, dimensionId)
+    const componentCost = await getComponentsCost(accountId , variantId, frameId, dimensionId)
     if(discountValue != 0){
         let originalPrice = componentCost.frame_cost + componentCost.dimension_cost
         let discount_amt = (discountValue/100)*originalPrice
