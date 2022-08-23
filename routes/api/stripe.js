@@ -18,10 +18,6 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
         // sigHeader and endpointSecret should mash
         event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret)
         let validType = (event.type == 'checkout.session.completed') || (event.type == 'checkout.session.async_payment_succeeded')
-        // if(event.type == "charge.succeeded"){
-        //     let chargeSession = event.data.object
-        //     console.log(chargeSession)
-        // }
         if(validType){
             // Payment session info
             let stripeSession = event.data.object
@@ -30,8 +26,30 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
             const paymentIntent = await Stripe.paymentIntents.retrieve(
                 stripeSession.payment_intent
             );
+            
+            const metaData = JSON.parse(event.data.object.metadata.orders)
+            const accountId = metaData[0].account_id
+            const receipt = paymentIntent.charges.data[0].receipt_url
+            const paymentType = paymentIntent.charges.data[0].payment_method_details.type
 
-            console.log(paymentIntent.charges.data)
+            console.log(stripeSession.customer_details.address)
+
+            const orderInfo = {
+                account_id: accountId,
+                total_cost: stripeSession.amount_total,
+                billing_country: stripeSession.customer_details.address.country,
+                billing_address_one: stripeSession.customer_details.address.line1,
+                billing_address_two: stripeSession.customer_details.address.line2,
+                billing_address_postal_code: stripeSession.customer_details.address.postal_code,
+                receipt_url: receipt,
+                payment_type: paymentType,
+                shipping_country: stripeSession.customer_details.address.country,
+                shipping_address_one: stripeSession.customer_details.address.line1,
+                shipping_address_two: stripeSession.customer_details.address.line2,
+                shipping_address_postal_code: stripeSession.customer_details.address.postal_code,
+
+
+            }
 
             // metaData info
             // const metaData = JSON.parse(event.data.object.metadata.orders)

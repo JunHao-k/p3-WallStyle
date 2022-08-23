@@ -20,7 +20,8 @@ router.get('/' , async (req , res) => {
         const dimensionId = item.dimension_id
         let itemCost = (await cartServices.getTotalCost(accountId , variantId, frameId, dimensionId))
         let itemName = `${item.variant.product.title}/${item.dimension.dimension_size}/Model ${item.variant.model_name}/${item.frame.frame_type}`
-
+        //console.log(item)
+        
         // const eachLineItem = {
         //     'name': itemName,
         //     'amount': itemCost,
@@ -44,8 +45,8 @@ router.get('/' , async (req , res) => {
         meta.push({
             account_id: item.account.id,
             variant_id: item.variant.id,
-            frame_id: item.frame_id,
-            dimension_id: item.dimension_id,
+            frame_id: frameId,
+            dimension_id: dimensionId,
             quantity: item.quantity
         })
     }

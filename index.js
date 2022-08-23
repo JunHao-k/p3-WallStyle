@@ -84,10 +84,10 @@ const accountRoutes = require('./routes/accounts.js');
 const { checkIfAuthenticatedJWT } = require("./middlewares");
 const api = {
   accounts: require('./routes/api/accounts'),
-  shopping_cart: require('./routes/api/shoppingcart'),
+  shopping_cart: require('./routes/api/cart'),
   checkout: require('./routes/api/checkout'),
   checkout_test: require('./routes/api/checkout_test'),
-  stripe: require('./routes/api/stripe_webhook')
+  stripe: require('./routes/api/stripe')
 }
 
 app.use("/", landingRoutes)
