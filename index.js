@@ -86,7 +86,8 @@ const api = {
   accounts: require('./routes/api/accounts'),
   shopping_cart: require('./routes/api/shoppingcart'),
   checkout: require('./routes/api/checkout'),
-  checkout_test: require('./routes/api/checkout_test')
+  checkout_test: require('./routes/api/checkout_test'),
+  stripe: require('./routes/api/stripe_webhook')
 }
 
 app.use("/", landingRoutes)
@@ -96,17 +97,13 @@ app.use('/accounts' , accountRoutes)
 
 app.use('/api/accounts' , express.json(), api.accounts)
 app.use('/api/cart' , express.json(), checkIfAuthenticatedJWT, api.shopping_cart)
+app.use('/api/checkout_test' , api.checkout_test)
+app.use('/api/checkout/process_payment' , api.stripe)
 app.use('/api/checkout' , express.json(), checkIfAuthenticatedJWT, api.checkout)
-app.use('/api/checkout_test' , express.json(),  api.checkout_test)
 
 
-// async function main() {
-//   app.get('/' , (req , res) => {
-//     res.send("Its alive")
-//   })
-// }
 
-// main();
+
 
 app.listen(3000, () => {
   console.log("Server has started");
