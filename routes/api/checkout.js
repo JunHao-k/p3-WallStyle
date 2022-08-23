@@ -30,6 +30,8 @@ router.get('/' , async (req , res) => {
         meta.push({
             account_id: item.account.id,
             variant_id: item.variant.id,
+            frame_id: item.frame_id,
+            dimension_id: item.dimension_id,
             quantity: item.quantity
         })
     }
@@ -55,6 +57,49 @@ router.get('/' , async (req , res) => {
         sessionId: stripeSession.id,
         publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
     })
+})
+
+// Webhook for stripe, after we create this endpoint, we will register it on Stripe as a webhook
+// Stripe will always call this endpoint when payment is completed, it is a POST route because we will make changes to the database(orders)
+router.post('/process_payment' , express.raw({type:'application/json'}) , async(req , res) => {
+    let payload = req.body //Payment information from stripe
+    let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET
+    let sigHeader = req.headers['stripe-signature'] // When stripe sneds info, there will be a signature and the key will be 'stripe-signature'
+    let event = null
+
+    try{
+        // sigHeader and endpointSecret should mash
+        event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret)
+        let validType = (event.type == 'checkout.session.completed') || (event.type == 'checkout.session.async_payment_succeeded')
+        if(validType){
+            // Payment session info
+            let stripeSession = event.data.object
+            console.log(stripeSession)
+
+            // metaData info
+            const metaData = JSON.parse(event.data.object.metadata.orders)
+            const accountId = metaData[0].account_id
+
+            const paymentIntent = await Stripe.paymentIntents.retrieve(stripeSession.payment_intent)
+            const chargeId = paymentIntent.charges.data[0].id
+            const charge = await Stripe.charges.retrieve(chargeId)
+            const receiptUrl = charge.receipt_url
+
+            const paymentType = charge.payment_method_details.type
+
+            // const orderInfo = {
+            //     account_id: accountId
+
+            // }
+            res.send({
+                'success': 'Payment made successfully'
+            })
+        }
+
+    }catch(error){
+        console.log(error)
+        res.status(500)
+    }
 })
 
 module.exports = router
