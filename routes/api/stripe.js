@@ -31,8 +31,9 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
             const accountId = metaData[0].account_id
             const receipt = paymentIntent.charges.data[0].receipt_url
             const paymentType = paymentIntent.charges.data[0].payment_method_details.type
+            const dateTime = new Date(paymentIntent.charges.data[0].created * 1000)
 
-            console.log(stripeSession.customer_details.address)
+            //console.log(dateTime.toLocaleString())
 
             const orderInfo = {
                 account_id: accountId,
@@ -40,16 +41,18 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
                 billing_country: stripeSession.customer_details.address.country,
                 billing_address_one: stripeSession.customer_details.address.line1,
                 billing_address_two: stripeSession.customer_details.address.line2,
-                billing_address_postal_code: stripeSession.customer_details.address.postal_code,
+                billing_postal_code: stripeSession.customer_details.address.postal_code,
                 receipt_url: receipt,
                 payment_type: paymentType,
                 shipping_country: stripeSession.customer_details.address.country,
                 shipping_address_one: stripeSession.customer_details.address.line1,
                 shipping_address_two: stripeSession.customer_details.address.line2,
-                shipping_address_postal_code: stripeSession.customer_details.address.postal_code,
-
-
+                shipping_postal_code: stripeSession.customer_details.address.postal_code,
+                payment_reference: stripeSession.payment_intent,
+                order_date: dateTime.toLocaleString()
             }
+
+            console.log(orderInfo)
 
             // metaData info
             // const metaData = JSON.parse(event.data.object.metadata.orders)
