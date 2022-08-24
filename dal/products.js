@@ -41,6 +41,20 @@ const getVariantById = async(variantId) => {
     return variant
 }
 
+const updateStock = async(variantId , newQuantity , deductedQuantity) => {
+    const variant = await getVariantById(variantId)
+    const product = variant.related('product')
+    const productStock = product.get('stock')
+
+    variant.set('model_stock' , newQuantity)
+    await variant.save()
+
+    product.set('stock' , productStock - deductedQuantity)
+    await product.save()
+
+    return true
+}
 
 
-module.exports = { getAllProducts, getAllThemes, getProductById, getVariantsByProductId, getVariantById }
+
+module.exports = { getAllProducts, getAllThemes, getProductById, getVariantsByProductId, getVariantById, updateStock }

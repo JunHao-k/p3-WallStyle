@@ -5,6 +5,8 @@ const router = express.Router();
 // });
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const orderDataLayer = require('../../dal/orders');
+const cartServices = require("../../services/carts")
+const productDataLayer = require("../../dal/products")
 
 
 // Webhook for stripe, after we create this endpoint, we will register it on Stripe as a webhook
@@ -22,7 +24,7 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
         if(validType){
             // Payment session info
             let stripeSession = event.data.object
-            console.log(stripeSession)
+            //console.log(stripeSession)
 
             const paymentIntent = await Stripe.paymentIntents.retrieve(
                 stripeSession.payment_intent
@@ -73,13 +75,15 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
 
                 await orderDataLayer.addOrderItem(orderItemInfo)
 
+                const currentVariantStock = await cartServices.getStock(variantId)
+                await productDataLayer.updateStock(variantId, currentVariantStock - quantity , quantity)
+
+
             }
-
-            console.log("Success")
-
+            await cartServices.emptyCart(accountId)
+            res.status(201)
             res.json({
-                'success': "Payment made successfully",
-                stripeSession
+                'success': "Order successfully made"
             })
         }
 

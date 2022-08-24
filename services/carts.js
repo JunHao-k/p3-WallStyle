@@ -44,7 +44,7 @@ const getTotalCost = async (accountId , variantId, frameId, dimensionId) => {
 
 
 
-const addToCart = async(accountId, variantId, frameId, dimensionId , quantity) => {
+const addToCart = async (accountId, variantId, frameId, dimensionId , quantity) => {
 
     const cartItem = await cartDataLayer.getCartItem(accountId, variantId, frameId, dimensionId)
     const stock = await getStock(variantId)
@@ -92,7 +92,7 @@ const addToCart = async(accountId, variantId, frameId, dimensionId , quantity) =
     
 }
 
-const updateCartItem = async(accountId , variantId, newQuantity , frameId, dimensionId) => {
+const updateCartItem = async (accountId , variantId, newQuantity , frameId, dimensionId) => {
     const currentStock = await getStock(variantId) // 4
     const cartItem = await cartDataLayer.getCartItem(accountId, variantId, frameId, dimensionId)
     const cartItemsByVariant = await cartDataLayer.getCartItemsByVariant(accountId , variantId)
@@ -117,9 +117,18 @@ const updateCartItem = async(accountId , variantId, newQuantity , frameId, dimen
     }
 }
 
-const deleteCartItem = async(accountId , variantId, cartId) => {
+const deleteCartItem = async (accountId , variantId, cartId) => {
     return await cartDataLayer.removeCartItem(accountId , variantId, cartId)
 }
 
+const emptyCart = async (accountId) => {
+    const allCartItems = await getCart(accountId)
+    for(let eachCartItem of allCartItems){
+        const variantId = eachCartItem.get('variant_id')
+        const cartId = eachCartItem.get('id')
+        await deleteCartItem(accountId, variantId, cartId)
+    }
+}
 
-module.exports = { addToCart, getCart, getStock, updateCartItem, deleteCartItem, getComponentsCost, getDiscount, getTotalCost }
+
+module.exports = { addToCart, getCart, getStock, updateCartItem, deleteCartItem, getComponentsCost, getDiscount, getTotalCost, emptyCart }

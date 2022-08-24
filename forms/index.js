@@ -101,15 +101,12 @@ const createSearchForm = (themes) => {
             'required': false,
             errorAfterField: true,
         }),
-        
         'on_sale': fields.string({
             required: false,
             errorAfterField: true,
             choices: [[0, "--- Item on sale ---"], [1 , "Yes"] , [2 , "No"]],
             widget: widgets.select(),  
         }),
-        
-
         'min_discount': fields.number({
             required: false,
             errorAfterField: true,
@@ -192,6 +189,10 @@ const createLoginForm = () => {
             errorAfterField: true
         })
     })
+}
+
+const createOrdersSearchForm = (orderStatuses) => {
+    
 }
 
 module.exports = { 
