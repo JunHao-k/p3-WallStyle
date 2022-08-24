@@ -20,7 +20,7 @@ router.get('/' , async (req , res) => {
         const dimensionId = item.dimension_id
         let itemCost = (await cartServices.getTotalCost(accountId , variantId, frameId, dimensionId))
         let itemName = `${item.variant.product.title}/${item.dimension.dimension_size}/Model ${item.variant.model_name}/${item.frame.frame_type}`
-        //console.log(item)
+        //console.log(itemCost)
         
         // const eachLineItem = {
         //     'name': itemName,

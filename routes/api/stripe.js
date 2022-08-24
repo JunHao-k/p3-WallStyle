@@ -4,6 +4,7 @@ const router = express.Router();
 //     apiVersion: "2020-08-27"
 // });
 const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const orderDataLayer = require('../../dal/orders');
 
 
 // Webhook for stripe, after we create this endpoint, we will register it on Stripe as a webhook
@@ -21,7 +22,7 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
         if(validType){
             // Payment session info
             let stripeSession = event.data.object
-            //console.log(stripeSession)
+            console.log(stripeSession)
 
             const paymentIntent = await Stripe.paymentIntents.retrieve(
                 stripeSession.payment_intent
@@ -39,36 +40,43 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
                 account_id: accountId,
                 total_cost: stripeSession.amount_total,
                 billing_country: stripeSession.customer_details.address.country,
-                billing_address_one: stripeSession.customer_details.address.line1,
-                billing_address_two: stripeSession.customer_details.address.line2,
+                billing_address_1: stripeSession.customer_details.address.line1,
+                billing_address_2: stripeSession.customer_details.address.line2,
                 billing_postal_code: stripeSession.customer_details.address.postal_code,
                 receipt_url: receipt,
                 payment_type: paymentType,
                 shipping_country: stripeSession.customer_details.address.country,
-                shipping_address_one: stripeSession.customer_details.address.line1,
-                shipping_address_two: stripeSession.customer_details.address.line2,
+                shipping_address_1: stripeSession.customer_details.address.line1,
+                shipping_address_2: stripeSession.customer_details.address.line2,
                 shipping_postal_code: stripeSession.customer_details.address.postal_code,
                 payment_reference: stripeSession.payment_intent,
-                order_date: dateTime.toLocaleString()
+                order_date: dateTime
             }
 
-            console.log(orderInfo)
+            const newOrder = await orderDataLayer.addOrder(orderInfo)
+            // console.log(newOrder)
+            const orderId = newOrder.get('id')
 
-            // metaData info
-            // const metaData = JSON.parse(event.data.object.metadata.orders)
-            // const accountId = metaData[0].account_id
+            for(let lineItem of metaData){
+                const variantId = lineItem.variant_id
+                const frameId = lineItem.frame_id
+                const dimensionId = lineItem.dimension_id
+                const quantity = lineItem.quantity
+        
+                const orderItemInfo = {
+                    order_id: orderId,
+                    quantity: quantity,
+                    dimension_id: dimensionId,
+                    frame_id: frameId,
+                    variant_id: variantId
+                }
 
-            // const paymentIntent = await Stripe.paymentIntents.retrieve(stripeSession.payment_intent)
-            // const chargeId = paymentIntent.charges.data[0].id
-            // const charge = await Stripe.charges.retrieve(chargeId)
-            // const receiptUrl = charge.receipt_url
+                await orderDataLayer.addOrderItem(orderItemInfo)
 
-            // const paymentType = charge.payment_method_details.type
+            }
 
-            // const orderInfo = {
-            //     account_id: accountId
+            console.log("Success")
 
-            // }
             res.json({
                 'success': "Payment made successfully",
                 stripeSession
