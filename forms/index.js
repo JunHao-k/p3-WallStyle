@@ -191,8 +191,32 @@ const createLoginForm = () => {
     })
 }
 
-const createOrdersSearchForm = (orderStatuses) => {
-    
+const createOrdersUpdateForm = (orderStatuses) => {
+    return forms.create({
+        'email': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'shipping_address_1': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'shipping_address_2': fields.string({
+            required: false,
+            errorAfterField: true
+        }),
+        'shipping_postal_code': fields.string({
+            required: true,
+            errorAfterField: true
+        }),
+        'order_status_id': fields.string({
+            label: 'Order Status',
+            required: true,
+            errorAfterField: true,
+            widget: widgets.select(), 
+            choices: orderStatuses
+        })
+    })
 }
 
 module.exports = { 
@@ -201,5 +225,6 @@ module.exports = {
     createSearchForm, 
     createAccountForm, 
     createLoginForm, 
-    bootstrapField  
+    bootstrapField,
+    createOrdersUpdateForm  
 }

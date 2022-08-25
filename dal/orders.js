@@ -20,10 +20,25 @@ const getAllOrders = async () => {
     })
 }
 
+const getAllOrderStatus = async () => {
+    return await OrderStatus.fetchAll().map(status => {
+        return [status.get('id'), status.get('status')]
+    });
+}
+
+const getOrderById = async (orderId) => {
+    return await Order.where({
+        'id': orderId
+    }).fetch({
+        withRelated: ['orderStatus' , 'account' , 'orderItems'], 
+        require: true  
+    })
+}
+
 // const getOrderStatusById = async (orderStatusId) => {
 
 // }
 
 
 
-module.exports = { addOrder, addOrderItem, getAllOrders }
+module.exports = { addOrder, addOrderItem, getAllOrders, getAllOrderStatus, getOrderById }

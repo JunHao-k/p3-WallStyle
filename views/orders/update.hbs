@@ -1,0 +1,27 @@
+{{#extends 'base'}}
+    {{#block 'content'}}
+        <h2>Update Order: {{order.id}}</h2>
+        <h3>Payment reference: {{order.payment_reference}}</h3>
+        <form method = "POST">
+            {{{form}}}
+            {{!-- <div>
+                {{#if product.image_set}}
+                    <img src = "{{product.image_set}}" id = "uploaded_image" style = "height: 300px; width: 300px; object-fit: cover" />
+                {{else}}
+                    <img src = "" style = "display:none; height: 300px; width: 300px; object-fit: cover" id = "uploaded_image"/>
+                {{/if}}
+            </div>
+            <div>
+                <a href = "#" class = "btn btn-primary" id = "upload_widget">Change Image</a>
+            </div> --}}
+
+            <input type="hidden" value="{{csrfToken}}" name="_csrf"/>
+            <input type = "submit" class = "btn btn-primary my-3"/>
+        </form>
+    {{/block}}
+
+    {{!-- {{#block 'js'}}
+        {{> cloudinaryJS imageId="#id_image_set"}}
+
+    {{/block}} --}}
+{{/extends}}

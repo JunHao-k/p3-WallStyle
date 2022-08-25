@@ -31,28 +31,34 @@
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>User</th>
+                        <th>User email</th>
                         <th>Payment reference</th>
-                        <th>Country</th>
-                        <th></th>
-                        <th>Stock</th>
-                        <th>Date</th>
-                        <th>Themes</th>
-                        <th>Image set</th>
-                        <th></th>
+                        <th>Payment type</th>
+                        <th>Shipping address</th>
+                        <th>Total cost</th>
+                        <th>Order status</th>
+                        <th>Receipt</th>
+                        <th>Order created</th>
                         <th></th>
                     </tr>
                     
                 </thead>
                 <tbody>
-                    {{#each products}}
+                    {{#each orders}}
                         <tr>
                             <td><h5>{{this.id}}</h5></td>
-                            <td><h5>{{this.title}}</h5></td>
-                            <td><h5>{{this.combo}}</h5></td>
-                            <td><h5>{{this.sales}}</h5></td>
-                            <td><h5>{{this.stock}}</h5></td>
-                            <td><h5>{{moment this.date format = "ddd, DD MMM YYYY"}}</h5></td>
-                            <td>
+                            <td><h5>{{this.account.first_name}} {{this.account.last_name}}</h5></td>
+                            <td><h5>{{this.account.email}}</h5></td>
+                            <td><h5>{{this.payment_reference}}</h5></td>
+                            <td><h5>{{this.payment_type}}</h5></td>
+                            <td><h5>{{this.billing_country}} {{this.billing_address_1}} {{this.billing_address_2}} </h5></td>
+                            <td><h5>{{this.total_cost}}</h5></td>
+                            <td><h5>{{this.orderStatus.status}} <a href="{{this.receipt_url}}" class="btn btn-dark btn-outline-light" target="_blank"><i class="fa-solid fa-eye"></i></a></h5></td>
+                            <td><a href="{{this.receipt_url}}" class="btn btn-dark btn-outline-light" target="_blank"><i class="fa-solid fa-eye"></i></a></td>
+                            <td><h5>{{moment this.order_date format = "ddd, DD MMM YYYY HH:mm:ss [GMT]"}}</h5></td>
+                            <td><a href="orders/{{this.id}}/update" class="btn btn-dark btn-outline-light">Update</a></td>
+                            {{!-- <td>
                                 {{#each this.themes}}
                                     <span class="badge bg-secondary">{{this.name}}</span>
                                 {{/each}}
@@ -72,14 +78,14 @@
                                         data-productid="{{this.id}}"
                                     ></i>
                                 </a>
-                            </td>
+                            </td> --}}
                         </tr>
                     {{/each}}
                 </tbody>
             </table>
         </div>
     {{/block}}
-    {{#block 'js'}}
+    {{!-- {{#block 'js'}}
         {{> sweetAlertJS target="product"}}
-    {{/block}}
+    {{/block}} --}}
 {{/extends}}

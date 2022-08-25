@@ -81,6 +81,7 @@ const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')
 const cloudinaryRoutes = require('./routes/cloudinary.js')
 const accountRoutes = require('./routes/accounts.js');
+const orderRoutes = require('./routes/orders')
 const { checkIfAuthenticatedJWT } = require("./middlewares");
 const api = {
   accounts: require('./routes/api/accounts'),
@@ -94,6 +95,7 @@ app.use("/", landingRoutes)
 app.use("/products", productRoutes)
 app.use('/cloudinary', cloudinaryRoutes)
 app.use('/accounts' , accountRoutes)
+app.use('/orders' , orderRoutes)
 
 app.use('/api/accounts' , express.json(), api.accounts)
 app.use('/api/cart' , express.json(), checkIfAuthenticatedJWT, api.shopping_cart)
