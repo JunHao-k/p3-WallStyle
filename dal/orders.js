@@ -35,10 +35,15 @@ const getOrderById = async (orderId) => {
     })
 }
 
-// const getOrderStatusById = async (orderStatusId) => {
+const getAllOrdersByAccount = async (accountId) => {
+    return await Order.where({
+        account_id: accountId
+    }).fetch({
+        withRelated: ['orderStatus' , 'account' , 'orderItems'],
+        require: false
+    })
+}
 
-// }
 
 
-
-module.exports = { addOrder, addOrderItem, getAllOrders, getAllOrderStatus, getOrderById }
+module.exports = { addOrder, addOrderItem, getAllOrders, getAllOrderStatus, getOrderById, getAllOrdersByAccount }

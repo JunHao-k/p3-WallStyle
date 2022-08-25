@@ -12,7 +12,7 @@ const getAllThemes = async() => {
     });
 }
 
-const getProductById = async(productId) => {
+const getProductById = async (productId) => {
     return await Product.where({
         'id': productId
     }).fetch({

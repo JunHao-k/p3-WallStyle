@@ -76,7 +76,7 @@ wax.setLayoutPath("./views/layouts");
 
 
 
-
+const { checkIfLoggedIn, checkIfAuthorised } = require('./middlewares')
 const landingRoutes = require("./routes/landing")
 const productRoutes = require('./routes/products')
 const cloudinaryRoutes = require('./routes/cloudinary.js')
@@ -88,20 +88,23 @@ const api = {
   shopping_cart: require('./routes/api/cart'),
   checkout: require('./routes/api/checkout'),
   checkout_test: require('./routes/api/checkout_test'),
-  stripe: require('./routes/api/stripe')
+  stripe: require('./routes/api/stripe'),
+  orders: require('./routes/api/orders')
 }
 
 app.use("/", landingRoutes)
 app.use("/products", productRoutes)
 app.use('/cloudinary', cloudinaryRoutes)
 app.use('/accounts' , accountRoutes)
-app.use('/orders' , orderRoutes)
+app.use('/orders' , checkIfLoggedIn, checkIfAuthorised, orderRoutes)
 
 app.use('/api/accounts' , express.json(), api.accounts)
 app.use('/api/cart' , express.json(), checkIfAuthenticatedJWT, api.shopping_cart)
 app.use('/api/checkout_test' , api.checkout_test)
 app.use('/api/checkout/process_payment' , api.stripe)
+app.use('/api/orders' , express.json(), checkIfAuthenticatedJWT, api.orders)
 app.use('/api/checkout' , express.json(), checkIfAuthenticatedJWT, api.checkout)
+
 
 
 

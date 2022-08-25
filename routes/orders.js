@@ -33,25 +33,6 @@ router.get('/' , async (req , res) => {
                 query.where('order_status_id', '=', form.data.order_status);
             }
 
-            // if(form.data.order_status == 1) {
-            //     query.where('order_status_id', '=', '1');
-            // }
-            // else if(form.data.order_status == 2){
-            //     query.where('order_status_id', '=', '2');
-            // }
-            // else if(form.data.order_status == 3){
-            //     query.where('order_status_id', '=', '3');
-            // }
-            // else if(form.data.order_status == 4){
-            //     query.where('order_status_id', '=', '4');
-            // }
-            // else if(form.data.order_status == 5){
-            //     query.where('order_status_id', '=', '5');
-            // }
-            // else{
-            //     query.where('order_status_id', '=', '6');
-            // }
-
             const orders = await query.fetch({
                 withRelated: ['orderStatus' , 'account' , 'orderItems']
             })
