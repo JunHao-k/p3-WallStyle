@@ -14,4 +14,16 @@ const addOrderItem = async (orderItemInfo) => {
     return addOrderItem
 }
 
-module.exports = { addOrder, addOrderItem }
+const getAllOrders = async () => {
+    return await Order.collection().fetch({
+        'withRelated': ['orderStatus' , 'account' , 'orderItems']
+    })
+}
+
+// const getOrderStatusById = async (orderStatusId) => {
+
+// }
+
+
+
+module.exports = { addOrder, addOrderItem, getAllOrders }
