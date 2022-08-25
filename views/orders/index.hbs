@@ -5,7 +5,7 @@
     
     {{#block 'content'}}
         <h1>Orders</h1>
-        {{!-- <h2>Search</h2>
+        <h3>Search Orders</h3>
         <div class="accordion" id="accordionExample">
             <div class="accordion-item mb-3">
                 <h2 class="accordion-header" id="headingOne">
@@ -22,7 +22,7 @@
                 </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
         
         {{!-- <div class="btn-div"><a href="products/create" class="add-btn"><i class="fa-solid fa-plus" style=" font-size: 40px"></i></a></div> --}}
         {{> flash}}
@@ -52,9 +52,18 @@
                             <td><h5>{{this.account.email}}</h5></td>
                             <td><h5>{{this.payment_reference}}</h5></td>
                             <td><h5>{{this.payment_type}}</h5></td>
-                            <td><h5>{{this.billing_country}} {{this.billing_address_1}} {{this.billing_address_2}} </h5></td>
+                            <td>
+                                <h5>{{this.billing_country}} {{this.shipping_address_1}} 
+                                    {{#if this.shipping_address_2}} 
+                                        <br/> 
+                                        {{this.shipping_address_2}} 
+                                    {{/if}}
+                                    {{this.shipping_postal_code}} 
+                                    
+                                </h5>
+                            </td>
                             <td><h5>{{this.total_cost}}</h5></td>
-                            <td><h5>{{this.orderStatus.status}} <a href="{{this.receipt_url}}" class="btn btn-dark btn-outline-light" target="_blank"><i class="fa-solid fa-eye"></i></a></h5></td>
+                            <td><h5>{{this.orderStatus.status}}</h5></td>
                             <td><a href="{{this.receipt_url}}" class="btn btn-dark btn-outline-light" target="_blank"><i class="fa-solid fa-eye"></i></a></td>
                             <td><h5>{{moment this.order_date format = "ddd, DD MMM YYYY HH:mm:ss [GMT]"}}</h5></td>
                             <td><a href="orders/{{this.id}}/update" class="btn btn-dark btn-outline-light">Update</a></td>

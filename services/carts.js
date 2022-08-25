@@ -35,7 +35,7 @@ const getTotalCost = async (accountId , variantId, frameId, dimensionId) => {
     if(discountValue != 0){
         let originalPrice = componentCost.frame_cost + componentCost.dimension_cost
         let discount_amt = (discountValue/100)*originalPrice
-        return originalPrice - discount_amt
+        return Math.trunc(originalPrice - discount_amt)
     }
     else{
         return (componentCost.frame_cost + componentCost.dimension_cost)

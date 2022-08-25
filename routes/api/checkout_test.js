@@ -9,7 +9,7 @@ const Stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 router.get('/' , async (req , res) => {
-    const accountId = 11
+    const accountId = 12
     const cartItems = (await cartServices.getCart(accountId)).toJSON()
     let lineItems = []
 	let meta = []
@@ -20,7 +20,8 @@ router.get('/' , async (req , res) => {
         const dimensionId = item.dimension_id
         let itemCost = (await cartServices.getTotalCost(accountId , variantId, frameId, dimensionId))
         let itemName = `${item.variant.product.title}/${item.dimension.dimension_size}/Model ${item.variant.model_name}/${item.frame.frame_type}`
-        //console.log(itemCost)
+        
+        console.log(itemCost)
         
         // const eachLineItem = {
         //     'name': itemName,
@@ -41,6 +42,7 @@ router.get('/' , async (req , res) => {
             },
             'quantity': item.quantity,  
         }
+        //console.log("Lineitmes ==> " , eachLineItem)
         lineItems.push(eachLineItem)
         meta.push({
             account_id: item.account.id,
@@ -49,6 +51,7 @@ router.get('/' , async (req , res) => {
             dimension_id: dimensionId,
             quantity: item.quantity
         })
+        console.log("Lineitmes ==> " , lineItems)
     }
 
     let metaData = JSON.stringify(meta)

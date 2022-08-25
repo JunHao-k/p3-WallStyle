@@ -193,10 +193,6 @@ const createLoginForm = () => {
 
 const createOrdersUpdateForm = (orderStatuses) => {
     return forms.create({
-        'email': fields.string({
-            required: true,
-            errorAfterField: true
-        }),
         'shipping_address_1': fields.string({
             required: true,
             errorAfterField: true
@@ -219,12 +215,41 @@ const createOrdersUpdateForm = (orderStatuses) => {
     })
 }
 
+const createOrderSearchForm = (orderStatuses) => {
+
+    return forms.create({
+        'min_spending': fields.number({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer()]
+        }),
+        'max_spending': fields.number({
+            required: false,
+            errorAfterField: true,
+            validators: [validators.integer()]
+        }),
+        'payment_type': fields.string({
+            required: false,
+            errorAfterField: true,
+            choices: [[0, "--- Payment Type ---"], ["grabpay" , "GrabPay"] , ["card" , "Card"], ["paynow" , "PayNow"]],
+            widget: widgets.select(),  
+        }),
+        'order_status': fields.string({
+            required: false,
+            errorAfterField: true,
+            choices: orderStatuses,
+            widget: widgets.select()
+        })
+    })
+}
+
 module.exports = { 
     createProductForm, 
     createVariantForm, 
     createSearchForm, 
     createAccountForm, 
     createLoginForm, 
+    createOrdersUpdateForm,  
+    createOrderSearchForm,
     bootstrapField,
-    createOrdersUpdateForm  
 }
