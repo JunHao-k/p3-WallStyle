@@ -2,7 +2,7 @@ const { Product, Theme, Variant } = require('../models')
 
 const getAllProducts = async() => {
     return await Product.collection().fetch({
-        'withRelated': ['themes']
+        'withRelated': ['themes' , 'variants']
     })
 }
 
@@ -16,7 +16,7 @@ const getProductById = async (productId) => {
     return await Product.where({
         'id': productId
     }).fetch({
-        withRelated: ['themes'], // Fetch all the themes associated with the product
+        withRelated: ['themes' , 'variants'], // Fetch all the themes associated with the product
         require: true  // If not found will cause an exception (aka an error)
     })
 }
