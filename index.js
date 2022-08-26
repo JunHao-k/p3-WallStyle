@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors')
 const hbs = require("hbs");
 const wax = require("wax-on");
 require("dotenv").config();
