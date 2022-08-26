@@ -38,7 +38,7 @@ const getOrderById = async (orderId) => {
 const getAllOrdersByAccount = async (accountId) => {
     return await Order.where({
         account_id: accountId
-    }).fetch({
+    }).fetchAll({
         withRelated: ['orderStatus' , 'account' , 'orderItems'],
         require: false
     })

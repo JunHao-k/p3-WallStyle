@@ -89,7 +89,8 @@ const api = {
   checkout: require('./routes/api/checkout'),
   checkout_test: require('./routes/api/checkout_test'),
   stripe: require('./routes/api/stripe'),
-  orders: require('./routes/api/orders')
+  orders: require('./routes/api/orders'),
+  products: require('./routes/api/products')
 }
 
 app.use("/", landingRoutes)
@@ -103,6 +104,7 @@ app.use('/api/cart' , express.json(), checkIfAuthenticatedJWT, api.shopping_cart
 app.use('/api/checkout_test' , api.checkout_test)
 app.use('/api/checkout/process_payment' , api.stripe)
 app.use('/api/orders' , express.json(), checkIfAuthenticatedJWT, api.orders)
+app.use('/api/products' , express.json() , api.products)
 app.use('/api/checkout' , express.json(), checkIfAuthenticatedJWT, api.checkout)
 
 

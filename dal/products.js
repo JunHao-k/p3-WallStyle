@@ -21,6 +21,13 @@ const getProductById = async (productId) => {
     })
 }
 
+const getProductByTheme = async (themeId) => {
+    let query = Product.collection().query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', '=', themeId);
+    return await query.fetch({
+        withRelated: ['themes' , 'variants']
+    })
+}
+
 const getVariantsByProductId = async(productId) => {
     const variants = await Variant.where({
         'product_id': productId
@@ -57,4 +64,4 @@ const updateStock = async(variantId , newQuantity , deductedQuantity) => {
 
 
 
-module.exports = { getAllProducts, getAllThemes, getProductById, getVariantsByProductId, getVariantById, updateStock }
+module.exports = { getAllProducts, getAllThemes, getProductById, getVariantsByProductId, getVariantById, updateStock, getProductByTheme }
