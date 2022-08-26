@@ -109,10 +109,6 @@ app.use('/api/products' , express.json() , api.products)
 app.use('/api/checkout' , express.json(), checkIfAuthenticatedJWT, api.checkout)
 
 
-
-
-
-
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server has started");
 });
