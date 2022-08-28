@@ -6,10 +6,14 @@ const getAllProducts = async() => {
     })
 }
 
-const getAllThemes = async() => {
+const getAllThemes = async () => {
     return await Theme.fetchAll().map(theme => {
         return [theme.get('id'), theme.get('name')]
     });
+}
+
+const getThemes = async () => {
+    return await Theme.collection().fetch()
 }
 
 const getProductById = async (productId) => {
@@ -64,4 +68,4 @@ const updateStock = async(variantId , newQuantity , deductedQuantity) => {
 
 
 
-module.exports = { getAllProducts, getAllThemes, getProductById, getVariantsByProductId, getVariantById, updateStock, getProductByTheme }
+module.exports = { getAllProducts, getAllThemes, getProductById, getVariantsByProductId, getVariantById, updateStock, getProductByTheme, getThemes }

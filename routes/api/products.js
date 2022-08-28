@@ -17,7 +17,7 @@ router.get('/:product_id' , async (req , res) => {
 })
 
 router.get('/themes' , async (req , res) => {
-    const themes = await productDataLayer.getAllThemes()
+    const themes = await productDataLayer.getThemes()
     res.status(200)
     res.json(themes)
 })
