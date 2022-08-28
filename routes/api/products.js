@@ -23,5 +23,11 @@ router.get('/theme/:theme_id' , async (req , res) => {
     res.json(product)
 })
 
+router.get('/themes' , async (req , res) => {
+    const themes = await productDataLayer.getAllThemes()
+    res.status(200)
+    res.json(themes)
+})
+
 
 module.exports = router;
