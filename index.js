@@ -18,6 +18,8 @@ let app = express();
 // set the view engine
 app.set("view engine", "hbs");
 
+app.use(cors());
+
 // static folder
 app.use(express.static("public"));
 
