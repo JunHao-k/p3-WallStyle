@@ -31,7 +31,7 @@ router.get('/variants/:product_id' , async (req , res) => {
 router.get('/get-product/:product_id' , async (req , res) => {
     const product = await productDataLayer.getProductById(req.params.product_id)
     res.status(200)
-    res.json(products)
+    res.json(product)
 })
 
 
