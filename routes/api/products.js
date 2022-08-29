@@ -15,6 +15,20 @@ router.get('/themes' , async (req , res) => {
     res.json(themes)
 })
 
+router.get('/theme/:theme_id' , async (req , res) => {
+    const product = await productDataLayer.getProductByTheme(req.params.theme_id)
+    //console.log(product.toJSON())
+    res.status(200)
+    res.json(product)
+})
+
+router.get('/variants/:product_id' , async (req , res) => {
+    const variants = await productDataLayer.getVariantsByProductId(req.params.product_id)
+    res.status(200)
+    res.json(variants)
+})
+
+
 router.get('/:product_id' , async (req , res) => {
     const product = await productDataLayer.getProductById(req.params.product_id)
     res.status(200)
@@ -23,12 +37,7 @@ router.get('/:product_id' , async (req , res) => {
 
 
 
-router.get('/theme/:theme_id' , async (req , res) => {
-    const product = await productDataLayer.getProductByTheme(req.params.theme_id)
-    console.log(product.toJSON())
-    res.status(200)
-    res.json(product)
-})
+
 
 
 
