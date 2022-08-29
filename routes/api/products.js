@@ -28,18 +28,18 @@ router.get('/variants/:product_id' , async (req , res) => {
     res.json(variants)
 })
 
-router.get('/products/:product_id' , async (req , res) => {
-    const products = await productDataLayer.getProductById(req.params.product_id)
+router.get('/get-product/:product_id' , async (req , res) => {
+    const product = await productDataLayer.getProductById(req.params.product_id)
     res.status(200)
     res.json(products)
 })
 
 
-router.get('/:product_id' , async (req , res) => {
-    const product = await productDataLayer.getProductById(req.params.product_id)
-    res.status(200)
-    res.json(product)
-})
+// router.get('/:product_id' , async (req , res) => {
+//     const product = await productDataLayer.getProductById(req.params.product_id)
+//     res.status(200)
+//     res.json(product)
+// })
 
 
 
