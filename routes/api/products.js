@@ -9,6 +9,16 @@ router.get("/" , async (req , res) => {
     res.json(allProducts)
 })
 
+router.get("/search" , async (req , res) => {
+    let query = Product.collection()
+    let forLike = "like"
+    if(process.env.DB_DRIVER == "postgres"){
+        forLike = "ilike"
+    }
+    console.log(req.query)
+    res.send(req.query)
+})
+
 router.get('/themes' , async (req , res) => {
     const themes = await productDataLayer.getAllThemes()
     res.status(200)
