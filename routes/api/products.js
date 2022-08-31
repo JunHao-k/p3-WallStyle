@@ -26,18 +26,18 @@ router.get("/search" , async (req , res) => {
 
     if(haveSearch){
         if(req.query.title){
-            query.where('title' , forLike , '%' + form.data.title + '%');
+            query.where('title' , forLike , '%' + req.query.title + '%');
         }
     
-        if(req.query.on_sale == 1) {
+        if(req.query.on_sales == 2) {
             query.where('sales', '=', 0);
         }
-        else if(req.query.on_sale == 2){
+        else if(req.query.on_sales == 1){
             query.where('sales', '!=', 0);
         }
 
         if(req.query.themes){
-            query.query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', 'in', form.data.themes.split(','));
+            query.query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', 'in', req.query.themes.split(','));
         }
 
         if(req.query.combo == 1) {
@@ -50,7 +50,7 @@ router.get("/search" , async (req , res) => {
             query.where('combo', '=', 3);
         }
         const allProducts = await query.fetch({
-            withRelated: ['themes']
+            withRelated: ['themes' , 'variants']
         })
         res.status(200)
         res.json(allProducts)
@@ -61,9 +61,6 @@ router.get("/search" , async (req , res) => {
         res.json(allProducts)
     }
     
-
-    // console.log(req.query)
-    // res.send(req.query)
 })
 
 router.get('/themes' , async (req , res) => {
