@@ -12,11 +12,58 @@ router.get("/" , async (req , res) => {
 router.get("/search" , async (req , res) => {
     let query = Product.collection()
     let forLike = "like"
+    let haveSearch = false
     if(process.env.DB_DRIVER == "postgres"){
         forLike = "ilike"
     }
-    console.log(req.query)
-    res.send(req.query)
+
+    for(const [key, value] of Object.entries(req.query)){
+        if(value.length > 0){
+            haveSearch = true
+            break;
+        }
+    }
+
+    if(haveSearch){
+        if(req.query.title){
+            query.where('title' , forLike , '%' + form.data.title + '%');
+        }
+    
+        if(req.query.on_sale == 1) {
+            query.where('sales', '=', 0);
+        }
+        else if(req.query.on_sale == 2){
+            query.where('sales', '!=', 0);
+        }
+
+        if(req.query.themes){
+            query.query('join', 'products_themes', 'products.id', 'product_id').where('theme_id', 'in', form.data.themes.split(','));
+        }
+
+        if(req.query.combo == 1) {
+            query.where('combo', '=', 1);
+        }
+        else if(req.query.combo == 2){
+            query.where('combo', '=', 2);
+        }
+        else if(req.query.combo == 3){
+            query.where('combo', '=', 3);
+        }
+        const allProducts = await query.fetch({
+            withRelated: ['themes']
+        })
+        res.status(200)
+        res.json(allProducts)
+    }
+    else{
+        const allProducts = await productDataLayer.getAllProducts()
+        res.status(200)
+        res.json(allProducts)
+    }
+    
+
+    // console.log(req.query)
+    // res.send(req.query)
 })
 
 router.get('/themes' , async (req , res) => {
