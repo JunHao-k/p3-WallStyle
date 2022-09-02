@@ -15,9 +15,9 @@ router.get('/' , async (req , res) => {
 router.post('/:variant_id/add' , async (req , res) => {
     const accountId = req.account.id
     const variantId = Number(req.params.variant_id)
-    const frameId = req.body.frameId
-    const dimensionId = req.body.dimensionId
-    const quantity = req.body.quantity
+    const frameId = Number(req.body.frameId)
+    const dimensionId = Number(req.body.dimensionId)
+    const quantity = Number(req.body.quantity)
     let haveError = !accountId || !variantId || !quantity || !frameId || !dimensionId
 
     // console.log("account ==> " , accountId)
@@ -58,8 +58,8 @@ router.put('/:variant_id/update' , async (req , res) => {
     //accountId , variantId, newQuantity
     const accountId = req.account.id
     const variantId = Number(req.params.variant_id)
-    const frameId = req.body.frameId
-    const dimensionId = req.body.dimensionId
+    const frameId = Number(req.body.frameId)
+    const dimensionId = Number(req.body.dimensionId)
     const quantity = Number(req.body.quantity)
     let haveError = !accountId || !variantId || !quantity || !frameId || !dimensionId
     console.log("This is req params ==> " , req.params)
@@ -90,8 +90,8 @@ router.put('/:variant_id/update' , async (req , res) => {
 })
 
 router.delete('/:variant_id/delete' , async (req , res) => {
-    const accountId = req.account.id;
-    const variantId = req.params.variant_id;
+    const accountId = req.account.id
+    const variantId = Number(req.params.variant_id)
     const cartId = Number(req.body.cartId)
 
     let haveError = !accountId || !variantId || !cartId
