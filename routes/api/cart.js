@@ -60,9 +60,11 @@ router.put('/:variant_id/update' , async (req , res) => {
     const variantId = Number(req.params.variant_id)
     const frameId = req.body.frameId
     const dimensionId = req.body.dimensionId
-    const quantity = req.body.quantity
+    const quantity = Number(req.body.quantity)
     let haveError = !accountId || !variantId || !quantity || !frameId || !dimensionId
-
+    console.log("This is req params ==> " , req.params)
+    console.log("This is req body ==> " , req.body)
+    
     if(haveError){
         res.status(400)
         res.json({
@@ -71,6 +73,7 @@ router.put('/:variant_id/update' , async (req , res) => {
     }
     else{
         const updateResult = await cartServices.updateCartItem(accountId, variantId, quantity , frameId, dimensionId )
+        console.log(updateResult)
         if(updateResult){
             res.status(200)
             res.json({

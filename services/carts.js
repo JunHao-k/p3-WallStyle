@@ -101,13 +101,17 @@ const updateCartItem = async (accountId , variantId, newQuantity , frameId, dime
     //const currentItemQty = cartItem.get('quantity') // 2 ==> supposed to be replaced by 4
     const currentItemId = cartItem.get('id') // Id = 3
 
+    // console.log("currentItemId ==> " , currentItemId)
+    // console.log("cartItemsByVariant ==> " , cartItemsByVariant.toJSON())
+
     for(let item of cartItemsByVariant){
         if(item.get('id') != currentItemId){
             others += item.get('quantity')
         }
     }
     console.log("others ==> " , others) // 2
-
+    console.log("New Quantity ==> " , newQuantity)
+    console.log("New Quantity + Others ==> " , newQuantity + others)
     if(newQuantity + others <= currentStock){
         await cartDataLayer.updateItemQuantity(accountId , variantId, newQuantity , frameId, dimensionId)
         return true
