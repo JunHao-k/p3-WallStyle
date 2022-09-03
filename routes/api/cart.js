@@ -89,10 +89,10 @@ router.put('/:variant_id/update' , async (req , res) => {
     }
 })
 
-router.delete('/delete/:variant_id' , async (req , res) => {
+router.delete('/delete/:cart_id/variant/:variant_id' , async (req , res) => {
     const accountId = req.account.id
     const variantId = req.params.variant_id
-    const cartId = Number(req.body.cartId)
+    const cartId = req.params.cart_id
 
     console.log("variantId ==> " , variantId)
     console.log("cartId ==> " , cartId)
