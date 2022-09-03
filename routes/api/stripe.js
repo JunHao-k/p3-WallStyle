@@ -20,7 +20,10 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
     try{
         // sigHeader and endpointSecret should mash
         event = Stripe.webhooks.constructEvent(payload, sigHeader, endpointSecret)
+        
         let validType = (event.type == 'checkout.session.completed') || (event.type == 'checkout.session.async_payment_succeeded')
+        
+        
         if(validType){
             // Payment session info
             let stripeSession = event.data.object
@@ -89,6 +92,7 @@ router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
 
     }catch(error){
         console.log(error)
+        console.log("Problem reached here")
         res.status(500)
     }
 })

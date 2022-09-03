@@ -49,7 +49,9 @@ checkIfAuthenticatedJWT = function(req , res , next){
         res.json({
             'error': 'No authorization headers found'
         })
-        return
+        // res.send(req.path)
+        // res.send(req.url)
+        return 
     }
 }
 

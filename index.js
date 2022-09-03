@@ -104,9 +104,11 @@ app.use('/orders' , checkIfLoggedIn, checkIfAuthorised, orderRoutes)
 
 app.use('/api/accounts' , express.json(), api.accounts)
 app.use('/api/cart' , express.json(), checkIfAuthenticatedJWT, api.shopping_cart)
+app.use('/api/checkout/process_payment', api.stripe)
 app.use('/api/checkout' , express.json(), checkIfAuthenticatedJWT, api.checkout)
+
 //app.use('/api/checkout_test' , api.checkout_test)
-app.use('/api/checkout/process_payment' , api.stripe)
+
 app.use('/api/orders' , express.json(), checkIfAuthenticatedJWT, api.orders)
 app.use('/api/products' , express.json() , api.products)
 
