@@ -94,8 +94,8 @@ router.delete('/delete/:cart_id/variant/:variant_id' , async (req , res) => {
     const variantId = req.params.variant_id
     const cartId = req.params.cart_id
 
-    console.log("variantId ==> " , variantId)
-    console.log("cartId ==> " , cartId)
+    // console.log("variantId ==> " , variantId)
+    // console.log("cartId ==> " , cartId)
 
     let haveError = !accountId || !variantId || !cartId
     if(haveError){

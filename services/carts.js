@@ -77,16 +77,7 @@ const addToCart = async (accountId, variantId, frameId, dimensionId , quantity) 
         }
     }
     else{
-        return await updateCartItem(accountId , variantId, quantity , frameId, dimensionId)
-        // let currentCartQty = cartItem.get('quantity')
-        // if(currentCartQty + quantity <= stock){
-        //     await cartDataLayer.updateItemQuantity(accountId , variantId, currentCartQty + quantity)
-        //     return true
-        // }
-        // else{
-        //     return false
-        // }
-        
+        return await updateCartItem(accountId , variantId, quantity , frameId, dimensionId) 
     }
 
     
@@ -109,9 +100,9 @@ const updateCartItem = async (accountId , variantId, newQuantity , frameId, dime
             others += item.get('quantity')
         }
     }
-    console.log("others ==> " , others) // 2
-    console.log("New Quantity ==> " , newQuantity)
-    console.log("New Quantity + Others ==> " , newQuantity + others)
+    // console.log("others ==> " , others) // 2
+    // console.log("New Quantity ==> " , newQuantity)
+    // console.log("New Quantity + Others ==> " , newQuantity + others)
     if(newQuantity + others <= currentStock){
         await cartDataLayer.updateItemQuantity(accountId , variantId, newQuantity , frameId, dimensionId)
         return true

@@ -14,7 +14,7 @@ const productDataLayer = require("../../dal/products")
 router.post('/' , express.raw({type:'application/json'}) , async(req , res) => {
     let payload = req.body //Payment information from stripe
     let endpointSecret = process.env.STRIPE_ENDPOINT_SECRET
-    let sigHeader = req.headers['stripe-signature'] // When stripe sneds info, there will be a signature and the key will be 'stripe-signature'
+    let sigHeader = req.headers['stripe-signature'] // When stripe sends info, there will be a signature and the key will be 'stripe-signature'
     let event = null
 
     try{

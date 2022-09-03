@@ -74,7 +74,6 @@ const updateItemQuantity = async(accountId , variantId, newQuantity , frameId, d
 
 const removeCartItem = async (accountId , variantId, cartId) => {
     const cartItem = await getCartItemByCartId(accountId , variantId, cartId)
-    console.log(cartItem)
     if(cartItem){
         await cartItem.destroy()
         return true
