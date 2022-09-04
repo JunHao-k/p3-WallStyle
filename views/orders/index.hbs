@@ -67,27 +67,6 @@
                             <td><a href="{{this.receipt_url}}" class="btn btn-dark btn-outline-light" target="_blank"><i class="fa-solid fa-eye"></i></a></td>
                             <td><h5>{{moment this.order_date format = "ddd, DD MMM YYYY HH:mm:ss [GMT]"}}</h5></td>
                             <td><a href="orders/{{this.id}}/update" class="btn btn-dark btn-outline-light">Update</a></td>
-                            {{!-- <td>
-                                {{#each this.themes}}
-                                    <span class="badge bg-secondary">{{this.name}}</span>
-                                {{/each}}
-                            </td>
-                            <td><img src = "{{this.image_set}}" style = "height: 100px; width: 100px"/></td>
-                            <td><a href="products/{{this.id}}/variants" class="btn btn-dark btn-outline-light">Variants</a></td>
-                            <td>
-                                <a href="products/{{this.id}}/update" class="btn btn-dark btn-outline-light"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a 
-                                    href="#"
-                                    data-productitem="{{this.title}}"
-                                    data-productid="{{this.id}}"
-                                    class="deleteBtn btn btn-dark btn-outline-light">
-                                    <i 
-                                        class="fa-solid fa-trash-can"
-                                        data-productitem="{{this.title}}"
-                                        data-productid="{{this.id}}"
-                                    ></i>
-                                </a>
-                            </td> --}}
                         </tr>
                     {{/each}}
                 </tbody>
