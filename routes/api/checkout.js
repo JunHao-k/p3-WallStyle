@@ -53,7 +53,7 @@ router.get('/' , async (req , res) => {
     const payment = {
         payment_method_types: ['card' , 'grabpay' , 'paynow'],
         line_items: lineItems,
-        success_url: process.env.STRIPE_SUCCESS_URL + `?sessionId={CHECKOUT_SESSION_ID}`,
+        success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
         billing_address_collection: 'required',
 		shipping_address_collection: {
