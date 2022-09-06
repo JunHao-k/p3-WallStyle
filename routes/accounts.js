@@ -14,7 +14,7 @@ const getHashedPassword = (password) => {
     return hash;
 }
 
-router.get('/signup' , async function(req , res){
+router.get('/signup' , checkIfLoggedIn, checkIfAuthorised, async function(req , res){
     const roles = await accountDataLayer.getAllRoles()
     const accountForm = createAccountForm(roles)
     res.render('accounts/signup' , {
