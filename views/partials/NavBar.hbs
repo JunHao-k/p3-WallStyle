@@ -11,13 +11,11 @@
         {{#eq account.role_id 1}}
             {{> ordersPartial}}
         {{/eq}}
-        {{!-- <li>
-            <a href="#">
-                <i class='bx bx-user'></i>
-                <span class="links_name">User</span>
-            </a>
-            <span class="tooltip">User</span>
-        </li> --}}
+
+        {{#eq account.role_id 1}}
+            {{> signupPartial}}
+        {{/eq}}
+        
         {{!-- <li>
             <a href="#">
                 <i class='bx bx-chat'></i>
